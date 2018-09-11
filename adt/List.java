@@ -115,7 +115,6 @@ public class List {
 	  public int find(Object o) {
 		  Node tmp=this.first;
 		  int c=0;
-		  
 		  while (tmp!=null) {
 			  if (tmp.getInfo()==o) {
 				  return c;
@@ -125,6 +124,26 @@ public class List {
 		  }
 		  return -1;
 	  }
+	  
+	  public void extract_o(Object o) {
+		    Node tmp=this.first;
+		    while(tmp!=null) {
+		    	 if (tmp.getInfo()==o) {
+				    	this.first=(this.first.getNext());
+				    	tmp=this.first;
+				    	this.size--;
+				    	return;
+				    }
+		    	 else if (tmp.getNext()!=null) {
+		    		if (tmp.getNext().getInfo()==o) {
+				    	tmp.setNext(tmp.getNext().getNext());
+				    	this.size--;
+				    	return;}
+			    }
+			    tmp=tmp.getNext();
+		    }
+}
+	  
 	  
 	}
 

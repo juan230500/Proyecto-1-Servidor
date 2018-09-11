@@ -51,6 +51,66 @@ public class Tablero {
 		}
 	}
 	
+	/**
+	  * Este método es el principal de la clase matriz_puntos
+	  * Busca realizar un recorrido por todos los puntos posibles
+	  * para identificar áreas cerradas siguiendo trayectorias lineales.
+	  * Realiza recursividad de pila en caso de bifurcaciones
+	  * 
+	  * @param ubi ubicación inicial del recorrido
+	  * @param aco Puntos acomulados en rocorridos pasados
+	  * @param ig Linea a ignorar en caso de recursión
+	  * @param cont Contador para ver que elemento tomar al inicio
+	  * @return lista con los puntos acomulados que formen un area cerrada
+	  */
+	 public List recorrido(int ubi,List aco, Linea ig,int cont) {
+		 Punto Pact=this.get(ubi);
+		 List L_rest=Pact.get_rest(ig);
+		 /*L_rest.print();
+		 System.out.print("\n");*/
+		 
+		 if (L_rest.getSize()>1+cont) {
+			 recorrido(ubi,aco.copy(),ig,cont+1);
+		 }
+		 
+		 
+		 Linea Lact=(Linea)L_rest.get(cont);
+		 Linea tp=Lact; //Lleva la línea anterior a cerrar un área
+		 
+		 if (-1!=Pact.getPrecedente().find(Lact)){
+			 System.out.print("#");
+			 Pact.getPrecedente().extract_o(Lact);
+			 return null;
+		 }
+		 
+		 while(L_rest.getSize()>0) {
+			 int tmp=aco.find(Pact.getXY());
+			 if (tmp!=-1){ //Caso de área cerrada
+				aco.print();
+				System.out.print("cierra");
+				Pact.getPrecedente().insert(tp);
+				return aco;
+			 }
+			 aco.insert(Pact.getXY());
+			 
+			 tp=Lact;
+			 Pact=Lact.conecta(Pact);
+			 L_rest=(Pact.get_rest(Lact));
+			 
+			 if (L_rest.getSize()>1) {
+				 System.out.print("$");
+				 recorrido(Pact.getXY(),aco.copy(),tp,0);
+				 return null;
+			 }
+			 
+			 if (L_rest.getSize()!=0)
+			 Lact=(Linea)L_rest.get(0);}
+		
+		aco.insert(Pact.getXY());
+		aco.print();
+		return aco;
+	}
+	
 	public void dibujar (Linea L1) {
 		
 	}
@@ -63,9 +123,6 @@ public class Tablero {
 		return dim;
 	}
 
-	public void setDim(int dim) {
-		dim = dim;
-	}
 
 	public List getPuntos() {
 		return Puntos;
