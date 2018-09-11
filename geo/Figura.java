@@ -13,5 +13,18 @@ public class Figura {
 	public void combinar (Figura F1) {
 		
 	}
+
+	public List getPuntos() {
+		return Puntos;
+	}
+
+	public Jugador getCreador() {
+		return Creador;
+	}
+
+	public float getArea() {
+		return Area;
+	}
+
 	
 }

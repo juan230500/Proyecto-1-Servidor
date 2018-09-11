@@ -13,4 +13,16 @@ public class Jugador {
 	public void sumar(int Puntaje) {
 		
 	}
+
+	public String getNombre() {
+		return Nombre;
+	}
+
+	public List getLineas() {
+		return Lineas;
+	}
+
+	public int getPuntaje() {
+		return Puntaje;
+	}
 }
