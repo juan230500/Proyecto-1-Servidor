@@ -1,4 +1,5 @@
 package adt;
+import geo.Fragmento;
 
 public class List {
 
@@ -78,7 +79,7 @@ public class List {
 	   * Imprime todos los elementos de la lista
 	   */
 	  public void print() {
-		 System.out.print("[");
+		System.out.print("[");
 	    if (size!=0) {
 	      Node tmp = first;
 	      while (tmp != null) {
@@ -156,7 +157,29 @@ public class List {
 	public void setLast(Node last) {
 		this.last = last;
 	}
+	
+	public void showF() {
+		int c=0;
+	    if (size!=0) {
+	      Node tmp = first;
+	      while (tmp != null) {
+	        System.out.print("Fragmento "+c);
+	        ((Fragmento)tmp.getInfo()).getMedios().print();
+	        System.out.print("Conecta ");
+	        ((Fragmento)tmp.getInfo()).getConex().print();
+	        ((Fragmento)tmp.getInfo()).getCp().print();
+	        System.out.print("Conecta ind");
+	        ((Fragmento)tmp.getInfo()).getConexi().print();
+	        ((Fragmento)tmp.getInfo()).getCpi().print();
+	        System.out.print("\n");
+	        
+	        tmp = tmp.getNext();
+	        c++;
+	      }
+	      
+	    }
 
+	}
 	  
 	}
 
