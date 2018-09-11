@@ -5,19 +5,25 @@ public class Punto {
 	int XY;
 	boolean bloqueo;
 	List Lineas;
+	List Fragmentos;
 	
 	
 	public Punto(int xy) {
 		XY=xy;
 		bloqueo=false;
 		Lineas=new List();
+		Fragmentos=new List();
 	}
 	/**
 	 * Agrega una linea dentro de la lsita de lineas del punto
-	 * @param L1 linea a gregar
+	 * @param L1 linea a agregar
 	 */
 	public void add(Linea L1) {
 		Lineas.insert(L1);
+	}
+	
+	public void add(Fragmento F1) {
+		Fragmentos.insert(F1);
 	}
 	
 	/**
@@ -45,6 +51,9 @@ public class Punto {
 
 	public List getLineas() {
 		return Lineas;
+	}
+	public List getFragmentos() {
+		return Fragmentos;
 	}
 
 }

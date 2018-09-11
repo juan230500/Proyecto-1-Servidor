@@ -4,9 +4,12 @@ public class List {
 
 	  protected Node first;
 	  private int size;
+	  private Node last; //para manejar mejor los fragmentos
 
 	  public List() {
 	    first = null;
+	    last=null;
+	    size=0;
 	  }
 	  
 	  /**
@@ -18,8 +21,28 @@ public class List {
 	    Node tmp = new Node(o, null);
 	    tmp.setNext(first);
 	    first = tmp;
+	    
+	    if (size==0) { //el last no cambia si se agrega al inicio
+	    	last=first;
+	    }
+	    
 	    this.size++;
 	  }
+	  
+	  public void insertf(Object o) {
+		    Node tmp = new Node(o, null);
+		    if (size!=0) {
+		    	last.setNext(tmp);
+		    	last=tmp;
+		    }
+		    else {
+		    	tmp.setNext(first);
+			    first = tmp;
+			    last=first;
+		    }
+		    this.size++;
+	  }
+	  
 	  
 	  /**
 	   * Elimina el primmer elemento de una lista enlazada
@@ -125,6 +148,15 @@ public class List {
 		  }
 		  return -1;
 	  }
+
+	public Node getLast() {
+		return last;
+	}
+
+	public void setLast(Node last) {
+		this.last = last;
+	}
+
 	  
 	}
 

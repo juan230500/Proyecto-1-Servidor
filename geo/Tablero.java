@@ -36,7 +36,7 @@ public class Tablero {
 	public void show() {
 		for (int i=0;i<dim;i++) {
 			for (int j=0;j<dim;j++) {
-				System.out.print(this.get(i*10+j)+"\t");
+				System.out.print(this.get(j*10+i)+"\t");
 			}
 			System.out.print("\n");
 		}
@@ -44,7 +44,7 @@ public class Tablero {
 	public void show2() {
 		for (int i=0;i<dim;i++) {
 			for (int j=0;j<dim;j++) {
-				this.get(i*10+j).getLineas().print();
+				this.get(j*10+i).getFragmentos().print();
 				System.out.print("\t");
 			}
 			System.out.print("\n");
@@ -61,10 +61,6 @@ public class Tablero {
 
 	public int getDim() {
 		return dim;
-	}
-
-	public void setDim(int dim) {
-		dim = dim;
 	}
 
 	public List getPuntos() {
