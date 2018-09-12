@@ -142,7 +142,15 @@ public class List {
 			    }
 			    tmp=tmp.getNext();
 		    }
-}
+	  }
+	  
+	  public void recortar(int pos) {
+		  Node tmp=first;
+		  for (int i=0;i<pos;i++) {
+			  tmp=tmp.getNext();
+		  }
+		  tmp.setNext(null);
+	  }
 	  
 	  
 	}

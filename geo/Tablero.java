@@ -1,5 +1,5 @@
 package geo;
-import adt.List;
+import adt.*;
 
 public class Tablero {
 	List Puntos;
@@ -51,6 +51,7 @@ public class Tablero {
 		}
 	}
 	
+	
 	/**
 	  * Este método es el principal de la clase matriz_puntos
 	  * Busca realizar un recorrido por todos los puntos posibles
@@ -65,6 +66,7 @@ public class Tablero {
 	  */
 	 public List recorrido(int ubi,List aco, Linea ig,int cont) {
 		 Punto Pact=this.get(ubi);
+		 System.out.println(Pact.getXY());
 		 List L_rest=Pact.get_rest(ig);
 		 /*L_rest.print();
 		 System.out.print("\n");*/
@@ -73,40 +75,41 @@ public class Tablero {
 			 recorrido(ubi,aco.copy(),ig,cont+1);
 		 }
 		 
-		 
 		 Linea Lact=(Linea)L_rest.get(cont);
-		 Linea tp=Lact; //Lleva la línea anterior a cerrar un área
 		 
 		 if (-1!=Pact.getPrecedente().find(Lact)){
 			 System.out.print("#");
 			 Pact.getPrecedente().extract_o(Lact);
 			 return null;
 		 }
+		 aco.insert(Pact.getXY());
 		 
 		 while(L_rest.getSize()>0) {
+			 
+			 Pact=Lact.conecta(Pact);
+			 System.out.println(Pact.getXY());
+			 L_rest=(Pact.get_rest(Lact));
+			 
 			 int tmp=aco.find(Pact.getXY());
 			 if (tmp!=-1){ //Caso de área cerrada
+				aco.recortar(tmp);
 				aco.print();
 				System.out.print("cierra");
-				Pact.getPrecedente().insert(tp);
+				Pact.getPrecedente().insert(Lact);
 				return aco;
 			 }
 			 aco.insert(Pact.getXY());
 			 
-			 tp=Lact;
-			 Pact=Lact.conecta(Pact);
-			 L_rest=(Pact.get_rest(Lact));
 			 
 			 if (L_rest.getSize()>1) {
 				 System.out.print("$");
-				 recorrido(Pact.getXY(),aco.copy(),tp,0);
+				 recorrido(Pact.getXY(),aco.copy(),Lact,0);
 				 return null;
 			 }
 			 
 			 if (L_rest.getSize()!=0)
 			 Lact=(Linea)L_rest.get(0);}
 		
-		aco.insert(Pact.getXY());
 		aco.print();
 		return aco;
 	}
