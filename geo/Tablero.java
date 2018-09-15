@@ -66,7 +66,7 @@ public class Tablero {
 	  */
 	 public List recorrido(int ubi,List aco, Linea ig,int cont) {
 		 Punto Pact=this.get(ubi);
-		 System.out.println(Pact.getXY());
+		 //System.out.println(Pact.getXY());
 		 List L_rest=Pact.get_rest(ig);
 		 /*L_rest.print();
 		 System.out.print("\n");*/
@@ -94,11 +94,11 @@ public class Tablero {
 			 if (tmp!=-1){ //Caso de área cerrada
 				aco.recortar(tmp);
 				aco.print();
-				System.out.print("cierra");
+				System.out.print("cierra\n");
 				Pact.getPrecedente().insert(Lact);
 				return aco;
 			 }
-			 aco.insert(Pact.getXY());
+			 
 			 
 			 
 			 if (L_rest.getSize()>1) {
@@ -107,10 +107,12 @@ public class Tablero {
 				 return null;
 			 }
 			 
+			 aco.insert(Pact.getXY());
+			 
 			 if (L_rest.getSize()!=0)
 			 Lact=(Linea)L_rest.get(0);}
 		
-		aco.print();
+		//aco.print();
 		return aco;
 	}
 	
