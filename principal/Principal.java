@@ -17,7 +17,7 @@ public class Principal {
 		Linea L0=new Linea(33,33,T1);
 		List Li=new List();
 		T1.show2();
-		T1.recorrido(20, Li, L0, 0);
+		T1.recorrido(11, Li, L0, 0);
 		
 	
 		

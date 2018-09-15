@@ -66,54 +66,66 @@ public class Tablero {
 	  */
 	 public List recorrido(int ubi,List aco, Linea ig,int cont) {
 		 Punto Pact=this.get(ubi);
-		 //System.out.println(Pact.getXY());
 		 List L_rest=Pact.get_rest(ig);
-		 /*L_rest.print();
-		 System.out.print("\n");*/
 		 
-		 if (L_rest.getSize()>1+cont) {
-			 recorrido(ubi,aco.copy(),ig,cont+1);
+		 if (L_rest.getSize()>1+cont) { //Caso de múltiples incios
+			// El nuevo recorrido empezará con su cont en una unidad más
+			// Con lo cual tomará otro primer elemento para su camino lineal
+			//Hasta el punto que se cubran todos los caminos lineales que hay en el inicio
+			 recorrido(ubi,aco.copy().copy(),ig,cont+1);
 		 }
 		 
+		 //Linea que define el primer recorrido incial
 		 Linea Lact=(Linea)L_rest.get(cont);
 		 
-		 if (-1!=Pact.getPrecedente().find(Lact)){
+		 if (-1!=Pact.getPrecedente().find(Lact)){ //Caso de repetir recorrido por linea que ya se entró
 			 System.out.print("#");
-			 Pact.getPrecedente().extract_o(Lact);
-			 return null;
+			 Pact.getPrecedente().extract_o(Lact); //La linea precedente se elimina después de ser usado
+			 return null; //Se detiene la ejecución de esa linea
 		 }
+		 
+		 //Se añade el primer punto
 		 aco.insert(Pact.getXY());
 		 
-		 while(L_rest.getSize()>0) {
+		 while(L_rest.getSize()>0) { //ciclo para recorrido lineal
 			 
+			 //Se actualiza el punto a la siguiente conexión de la linea actual
 			 Pact=Lact.conecta(Pact);
-			 System.out.println(Pact.getXY());
+			 //Se buscan las lineas que no sean la que se acaba de pasar
 			 L_rest=(Pact.get_rest(Lact));
 			 
+			 //Se pregunta si el nuevo punto ya fue recorrido, osea si está en aco
 			 int tmp=aco.find(Pact.getXY());
 			 if (tmp!=-1){ //Caso de área cerrada
+				//Se recorta en caso de tocar el acomulado en algun lugar diferente del inicio
 				aco.recortar(tmp);
 				aco.print();
 				System.out.print("cierra\n");
+				//Se coloca un precedente para no volver a salir desde la linea por la que se entró
 				Pact.getPrecedente().insert(Lact);
+				//Retorna el area en forma de lista de coordenadas
 				return aco;
 			 }
 			 
 			 
-			 
+			 //Se pregunta si el camino lienal llega a una bifuración
 			 if (L_rest.getSize()>1) {
 				 System.out.print("$");
-				 recorrido(Pact.getXY(),aco.copy(),Lact,0);
+				 //Se reinicia como si fuera un caso de múltiples inicios
+				 //Con el mismo acomulado y se ignora la linea actual
+				 recorrido(Pact.getXY(),aco.copy().copy(),Lact,0);
 				 return null;
 			 }
 			 
+			 //Si no hay bifurcación se agrega el punto
 			 aco.insert(Pact.getXY());
 			 
+			 //Si hay lineas para continuar el recorrido se toma la primera (recorrido linea)
 			 if (L_rest.getSize()!=0)
 			 Lact=(Linea)L_rest.get(0);}
-		
-		//aco.print();
-		return aco;
+		 
+		//No se encontraron areas entonces solo se detiene la ejecución
+		return null;
 	}
 	
 	public void dibujar (Linea L1) {
