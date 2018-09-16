@@ -100,7 +100,6 @@ public class Tablero {
 			 //Se pregunta si el nuevo punto ya fue recorrido, osea si está en aco
 			 int tmp=aco.find(Pact.getXY());
 			 if (tmp!=-1){ //Caso de área cerrada
-				 
 				//Se recorta en caso de tocar el acomulado en algun lugar diferente del inicio
 				aco.recortar(tmp);
 				aco.print();

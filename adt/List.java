@@ -122,8 +122,9 @@ public class List {
 		  Node tmp=first;
 		  for (int i=0;i<pos;i++) {
 			  tmp=tmp.getNext();
-			  this.size--;
 		  }
+		  //las posicion a recortar el igual a los nodos que se conservan más 1
+		  this.size=pos+1;
 		  tmp.setNext(null);
 	  }
 	  

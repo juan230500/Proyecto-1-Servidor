@@ -88,7 +88,25 @@ public class Figura {
 			System.out.println("Triángulo");
 		}
 		else if(tam==6 && this.getPuntos().getSize()==6 ) {
-			System.out.println("Hexágono");
+			Node tmp=L1.getFirst();
+			//Recorrido para secar pendiente de dos segmentos entre puntos
+			int pendiente1=(int)tmp.getInfo()-(int)tmp.getNext().getInfo();
+			tmp=tmp.getNext();
+			int pendiente2=(int)tmp.getInfo()-(int)tmp.getNext().getInfo();
+			tmp=tmp.getNext();
+			tmp=tmp.getNext();
+			
+			//Recorrido para sacar pedientes de los segmentos pararelos a los anteriores
+			int pendiente3=(int)tmp.getInfo()-(int)tmp.getNext().getInfo();
+			tmp=tmp.getNext();
+			int pendiente4=(int)tmp.getInfo()-(int)tmp.getNext().getInfo();
+			
+			//La pendiente de cada segmento debe ser complementaria a la de su paralelo
+			if (pendiente1==-pendiente3 && pendiente2==-pendiente4) {
+				System.out.println("Hexágono");}
+			else {
+				System.out.println("Polígono");
+			}
 		}
 		else {
 			System.out.println("Polígono");
