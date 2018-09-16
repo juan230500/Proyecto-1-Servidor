@@ -4,9 +4,11 @@ import adt.*;
 public class Tablero {
 	List Puntos;
 	int dim;
+	List Figuras;
 	
 	public Tablero(int dim) {
 		this.dim=dim;
+		this.Figuras=new List();
 		
 		Punto P1=new Punto(00);
 		List L1=new List();
@@ -74,6 +76,7 @@ public class Tablero {
 			//Hasta el punto que se cubran todos los caminos lineales que hay en el inicio
 			 recorrido(ubi,aco.copy().copy(),ig,cont+1);
 		 }
+
 		 
 		 //Linea que define el primer recorrido incial
 		 Linea Lact=(Linea)L_rest.get(cont);
@@ -97,14 +100,22 @@ public class Tablero {
 			 //Se pregunta si el nuevo punto ya fue recorrido, osea si está en aco
 			 int tmp=aco.find(Pact.getXY());
 			 if (tmp!=-1){ //Caso de área cerrada
+				 
 				//Se recorta en caso de tocar el acomulado en algun lugar diferente del inicio
 				aco.recortar(tmp);
 				aco.print();
 				System.out.print("cierra\n");
+				
 				//Se coloca un precedente para no volver a salir desde la linea por la que se entró
 				Pact.getPrecedente().insert(Lact);
-				//Retorna el area en forma de lista de coordenadas
-				return aco;
+				
+				//Inserta el area en forma de lista de coordenadas
+				if (Figuras.find(aco)==-1) {
+					Figura F1=new Figura(aco);
+					this.Figuras.insert(F1);
+				}
+				
+				return null;
 			 }
 			 
 			 
@@ -143,5 +154,9 @@ public class Tablero {
 
 	public List getPuntos() {
 		return Puntos;
+	}
+
+	public List getFiguras() {
+		return Figuras;
 	}
 }
