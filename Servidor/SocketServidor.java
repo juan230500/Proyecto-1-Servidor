@@ -6,10 +6,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import Cliente.Envio;
-import Cliente.Respuesta;
-import geo.*;
 /*
  * 
  */
@@ -28,7 +24,7 @@ public class SocketServidor {
 		
 		try {
 			ServidorSocket = new ServerSocket(7777);
-			ServidorSocket1 = new ServerSocket(7778); 		
+			//ServidorSocket1 = new ServerSocket(7778); 		
 					}
 		catch(IOException error) {
 			System.err.println("No se puede escuchar en puerto 7777 o 7778");
@@ -38,7 +34,7 @@ public class SocketServidor {
 		
 		try {
 			ClienteSocket = ServidorSocket.accept();
-			ClienteSocket1 = ServidorSocket1.accept();
+			//ClienteSocket1 = ServidorSocket1.accept();
 		}
 		catch(IOException error){
 			System.err.println("Falla en la conexión");
@@ -60,7 +56,8 @@ public class SocketServidor {
 		}
 		
 	}
-	public static String Ansout(Respuesta e)JsonProcessingException {
+	
+	public static String Ansout(Respuesta e) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = null;
 			json = mapper.writeValueAsString(e);
@@ -71,15 +68,17 @@ public class SocketServidor {
 		Respuesta a = mapper.readValue(json, Respuesta.class);
 		return a;
 	}
-	public static String Shipout(Envio e)JsonProcessingException {
+	
+	public static String Shipout(Envio e) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = null;
-			json = mapper.writeValueAsString(e);
+		json = mapper.writeValueAsString(e);
 		return json;
 	}
+	
 	public static Envio Shipin(String json) throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		Envio e = mapper.readValue(json, Respuesta.class);
+		Envio e = mapper.readValue(json, Envio.class);
 		return e;
 	}
 	public void close() throws IOException {
@@ -88,4 +87,5 @@ public class SocketServidor {
 		ClienteSocket.close();
 		ServidorSocket.close();
 	}
+
 }
