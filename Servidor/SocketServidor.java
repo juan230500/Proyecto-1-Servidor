@@ -6,6 +6,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import Interfaz.Envio;
+import Interfaz.Respuesta;
 /*
  * 
  */
@@ -23,8 +26,8 @@ public class SocketServidor {
 	public  void start() throws IOException{
 		
 		try {
-			ServidorSocket = new ServerSocket(7777);
-			//ServidorSocket1 = new ServerSocket(7778); 		
+			ServidorSocket = new ServerSocket(n);
+			ServidorSocket1 = new ServerSocket(n1); 		
 					}
 		catch(IOException error) {
 			System.err.println("No se puede escuchar en puerto 7777 o 7778");
@@ -34,27 +37,33 @@ public class SocketServidor {
 		
 		try {
 			ClienteSocket = ServidorSocket.accept();
-			//ClienteSocket1 = ServidorSocket1.accept();
+			ClienteSocket1 = ServidorSocket1.accept();
 		}
 		catch(IOException error){
 			System.err.println("Falla en la conexión");
 			System.exit(1);
 		}
-		PrintWriter salida = new PrintWriter(ClienteSocket.getOutputStream(), true);
-		PrintWriter salida1 = new PrintWriter(ClienteSocket1.getOutputStream(), true);
+		
+	}
+	
+	public void escuchar(Object data) throws IOException {
 		BufferedReader entrada = new BufferedReader(new InputStreamReader(ClienteSocket.getInputStream()));		
-		BufferedReader entrada1 = new BufferedReader(new InputStreamReader(ClienteSocket.getInputStream()));		
-		String inputLine, outputLine, inputLine1, outputLine1;
-		while(((inputLine = entrada.readLine())!=null)&&((inputLine1 = entrada1.readLine())!=null)) {
-			outputLine = inputLine;
-			outputLine1 = inputLine1;
-			salida.println("Fwd:"+outputLine);
-			salida1.println("Fwd1:"+outputLine1);
-			if(outputLine.equals("salir")||outputLine1.equals("salir"))
-				break;
+		BufferedReader entrada1 = new BufferedReader(new InputStreamReader(ClienteSocket1.getInputStream()));
+		System.out.println("Cliente1:"+entrada);
+		System.out.println("Cliente2:"+entrada1);
 		
-		}
 		
+	}
+	public void enviar(Respuesta data, Socket a) throws IOException {
+		salida = new PrintWriter(a.getOutputStream(),true);	
+		salida.println(Ansout(data));
+		System.out.println(Ansout(data)); //...
+	}
+	public Envio recibir(Socket a) throws IOException {
+		entrada = new BufferedReader(new InputStreamReader(a.getInputStream()));
+		String inputline = entrada.readLine();
+		return Shipin(inputline);
+		System.out.println(Shipin(inputline)); //para llevar control de lo que se envia
 	}
 	
 	public static String Ansout(Respuesta e) throws JsonProcessingException {
