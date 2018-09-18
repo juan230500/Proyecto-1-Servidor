@@ -1,16 +1,19 @@
 package geo;
 import adt.List;
+import adt.Node;
 
 public class Punto {
 	int XY;
 	boolean bloqueo;
 	List Lineas;
+	List Precedente;
 	
 	
 	public Punto(int xy) {
 		XY=xy;
 		bloqueo=false;
 		Lineas=new List();
+		Precedente=new List();
 	}
 	/**
 	 * Agrega una linea dentro de la lsita de lineas del punto
@@ -30,6 +33,29 @@ public class Punto {
 		Punto P1=new Punto(xy);
 		return P1;
 	}
+	
+	/**
+	  * Función que servirá para realizar recorridos
+	  * al decirle a un recorrido que ignore su linea de origen
+	  * y se concentre en las que le falta recorrer en el nuevo punto
+	  * 
+	  * @author juan
+	  * 
+	  * @param ig Linea a ignorar
+	  * @return lt Lista con todas las líneas del punto
+	  * 		menos la linea a ignorar
+	  */
+	 public List get_rest(Linea ig) {
+		 List lt=new List();
+		 Node tmp=this.Lineas.getFirst();
+		 while (tmp!=null) {
+			 if ((Linea)tmp.getInfo()!=ig) {
+				 lt.insert(tmp.getInfo());
+			 }
+			 tmp=tmp.getNext();
+		 }
+		 return lt;
+	 }
 
 	public int getXY() {
 		return XY;
@@ -46,5 +72,9 @@ public class Punto {
 	public List getLineas() {
 		return Lineas;
 	}
+	public List getPrecedente() {
+		return Precedente;
+	}
+	
 
 }
