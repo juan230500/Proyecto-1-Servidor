@@ -12,6 +12,53 @@ public class Figura {
 	}
 	
 	/**
+	 * Devuelve si el punto xy está dentro de la figura para ver si hay que bloquearlo
+	 * En caso de ser parte de ella no se bloquea
+	 * @param xy el punto a preguntar si esta cerrado
+	 * @return un valor true si el punto está dentro
+	 */
+	public boolean bloqueo(int xy){
+		if (this.Puntos.find(xy)!=-1){
+			return true;
+		}
+		
+		int cont=0;
+		int vert_aco=-1;
+		
+		while (xy<60){
+			if (this.vertices().find(xy)!=-1){
+				if (vert_aco==-1){
+					vert_aco=xy;
+				}
+				else{
+					vert_aco=-1;
+					
+					cont-=((xy-vert_aco)/10)-1;
+				}
+				
+				}
+			
+			else if (this.Puntos.find(xy)!=-1){
+				cont++;
+			}
+			else{
+				vert_aco=-1;
+			}
+
+			xy+=10;
+		}
+		
+		if (cont%2==0){
+			System.out.println(false);
+			return false;
+		}
+		else{
+			System.out.println(true);
+			return true;
+		}
+	}
+	
+	/**
 	 * Metodo que devuelve la cantidad de vértices
 	 * de una figura usando sus coordenadas para ver donde hay esquinas.
 	 * @return la cantidad de vértices
@@ -113,14 +160,39 @@ public class Figura {
 		}
 		
 	}
-	
-	public float calc_area(List Puntos) {
-		return 0;
-	}
-	
-	public void combinar (Figura F1) {
+	/**
+	 * Método que calcula el área de un figura en unidades lineales cuadradas
+	 * Solo se apoya en los vértices para ello y usa lo formula de Gauss de areas
+	 * @return el valor del área total
+	 */
+	public float calc_area() { 
+		//Fórmula de Gauss para áreas
+		Node tmp=this.vertices().getFirst();
+		Node tmp2=tmp.getNext();
+		float area=0;
+		int x1;
+		int x2;
+		int y1;
+		int y2;
 		
+		while (tmp2!=null) {
+			x1=(int)((int)tmp.getInfo()/10);
+			x2=(int)((int)tmp2.getInfo()/10);
+			y1=(int)tmp.getInfo()%10;
+			y2=(int)tmp2.getInfo()%10;
+			area+=Math.abs(x1*y2-y1*x2);
+			tmp=tmp2;
+			tmp2=tmp2.getNext();
+		}
+		tmp2=this.vertices().getFirst();
+		x1=(int)((int)tmp.getInfo()/10);
+		x2=(int)((int)tmp2.getInfo()/10);
+		y1=(int)tmp.getInfo()%10;
+		y2=(int)tmp2.getInfo()%10;
+		area+=Math.abs(x1*y2-y2*x1);
+		return area/2;
 	}
+	
 
 	public List getPuntos() {
 		return Puntos;

@@ -3,6 +3,7 @@ package geo;
 public class Linea {
 	Punto Inicio;
 	Punto Fin;
+	String Jugador;
 	
 	public Linea(int xy1,int xy2,Tablero T1) {
 		this.Inicio=T1.get(xy1);
