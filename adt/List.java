@@ -127,6 +127,27 @@ public class List {
 		  this.size=pos+1;
 		  tmp.setNext(null);
 	  }
+	  /**
+	   * Busca dos posiciones en la lista y elimina todos los elementos
+	   * entre esas posiciones sin incluirlos a ambos
+	   * @param pos1 primera posición límite
+	   * @param pos2 segunda posición límite
+	   */
+	  public void recortar(int pos1, int pos2) {
+		  Node tmp=first;
+		  Node tmp2=first;
+		  for (int i=0;i<pos1;i++) {
+			  tmp=tmp.getNext();
+		  }
+		  tmp2=tmp;
+		  for (int i=pos1;i<pos2;i++) {
+			  tmp2=tmp2.getNext();
+		  }
+		  //las posicion a recortar el igual a los nodos que se conservan más 1
+		  this.size-=(pos1-pos2);
+		  tmp.setNext(tmp2);
+		  
+	  }
 	  
 	  /**
 	   * Imprime un elemento de la lista

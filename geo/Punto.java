@@ -7,11 +7,13 @@ public class Punto {
 	boolean bloqueo;
 	List Lineas;
 	List Precedente;
+	boolean bloqueo_d;
 	
 	
 	public Punto(int xy) {
 		XY=xy;
 		bloqueo=false;
+		bloqueo_d=false;
 		Lineas=new List();
 		Precedente=new List();
 	}
@@ -74,6 +76,12 @@ public class Punto {
 	}
 	public List getPrecedente() {
 		return Precedente;
+	}
+	public boolean isBloqueo_d() {
+		return bloqueo_d;
+	}
+	public void setBloqueo_d(boolean bloqueo_d) {
+		this.bloqueo_d = bloqueo_d;
 	}
 	
 
