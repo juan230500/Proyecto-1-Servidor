@@ -8,6 +8,7 @@ public class Figura {
 	
 	public Figura(List puntos) {
 		this.Puntos=puntos;
+		this.Area=this.calc_area();
 		
 	}
 	
@@ -17,9 +18,11 @@ public class Figura {
 	 * @param xy el punto a preguntar si esta cerrado
 	 * @return un valor true si el punto está dentro
 	 */
-	public boolean bloqueo(int xy){
+	public int bloqueo(int xy){
+		//inspirado en el algoritmo de Jordan
 		if (this.Puntos.find(xy)!=-1){
-			return true;
+			//No decide si pertenece al perímetro
+			return 1;
 		}
 		
 		int cont=0;
@@ -49,12 +52,39 @@ public class Figura {
 		}
 		
 		if (cont%2==0){
-			System.out.println(false);
-			return false;
+			//Caso de que está fuera de la figura
+			return 2;
 		}
 		else{
-			System.out.println(true);
+			//Caso de que está dentro de la figura
+			return 0;
+		}
+	}
+	/**
+	 * Método que determina si una figura contiene a otra subfigura del todo
+	 * @param F1 la subfigura a evaluar
+	 * @return true si la subfigura está dentro, false de lo contrario
+	 */
+	public boolean subfig(Figura F1) {
+		Node tmp=F1.getPuntos().getFirst();
+		int det=1;
+		//El determinante 1 no decide
+		while (det==1) {
+			det=bloqueo((int)tmp.getInfo());
+			//System.out.println("el determinante es "+det+" para el punto "+tmp.getInfo());
+			tmp=tmp.getNext();
+			//Caso que todos los lados coincidan entonces es la misma figura
+			if (tmp==null) {
+				return true;
+			}
+		}
+		//Con que haya un punto afuera ya se toma que el resto de la figura lo está
+		//Debido a que como es un área de recorrido debió pasar alrededor de toda la figura oevitarla por completo
+		if (det==0) {
 			return true;
+		}
+		else{
+			return false;
 		}
 	}
 	
@@ -168,28 +198,35 @@ public class Figura {
 	public float calc_area() { 
 		//Fórmula de Gauss para áreas
 		Node tmp=this.vertices().getFirst();
+		Node aux=tmp;
 		Node tmp2=tmp.getNext();
 		float area=0;
 		int x1;
 		int x2;
 		int y1;
 		int y2;
+		int aco_iz=0;
+		int aco_der=0;
 		
 		while (tmp2!=null) {
 			x1=(int)((int)tmp.getInfo()/10);
 			x2=(int)((int)tmp2.getInfo()/10);
 			y1=(int)tmp.getInfo()%10;
 			y2=(int)tmp2.getInfo()%10;
-			area+=Math.abs(x1*y2-y1*x2);
+			aco_iz+=x1*y2;
+			aco_der+=y1*x2;
+			
 			tmp=tmp2;
 			tmp2=tmp2.getNext();
 		}
-		tmp2=this.vertices().getFirst();
+		tmp2=aux;
 		x1=(int)((int)tmp.getInfo()/10);
 		x2=(int)((int)tmp2.getInfo()/10);
 		y1=(int)tmp.getInfo()%10;
 		y2=(int)tmp2.getInfo()%10;
-		area+=Math.abs(x1*y2-y2*x1);
+		aco_iz+=x1*y2;
+		aco_der+=y1*x2;
+		area=Math.abs(aco_der-aco_iz);
 		return area/2;
 	}
 	
@@ -204,6 +241,10 @@ public class Figura {
 
 	public float getArea() {
 		return Area;
+	}
+
+	public void setArea(float area) {
+		Area = area;
 	}
 
 	

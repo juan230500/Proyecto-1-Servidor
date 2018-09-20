@@ -66,7 +66,7 @@ public class Tablero {
 	  * @param cont Contador para ver que elemento tomar al inicio
 	  * @return lista con los puntos acomulados que formen un area cerrada
 	  */
-	 public List recorrido(int ubi,List aco, Linea ig,int cont) {
+	 public List recorrido(int inicio,int ubi,List aco, Linea ig,int cont) {
 		 Punto Pact=this.get(ubi);
 		 List L_rest=Pact.get_rest(ig);
 		 
@@ -74,7 +74,9 @@ public class Tablero {
 			// El nuevo recorrido empezará con su cont en una unidad más
 			// Con lo cual tomará otro primer elemento para su camino lineal
 			//Hasta el punto que se cubran todos los caminos lineales que hay en el inicio
-			 recorrido(ubi,aco.copy().copy(),ig,cont+1);
+			 if(recorrido(inicio,ubi,aco.copy().copy(),ig,cont+1)==null) {
+				 return null;
+			 };
 		 }
 
 		 
@@ -84,7 +86,7 @@ public class Tablero {
 		 if (-1!=Pact.getPrecedente().find(Lact)){ //Caso de repetir recorrido por linea que ya se entró
 			 System.out.print("#");
 			 Pact.getPrecedente().extract_o(Lact); //La linea precedente se elimina después de ser usado
-			 return null; //Se detiene la ejecución de esa linea
+			 return new List(); //Se detiene la ejecución de esa linea
 		 }
 		 
 		 //Se añade el primer punto
@@ -103,7 +105,12 @@ public class Tablero {
 				//Se recorta en caso de tocar el acomulado en algun lugar diferente del inicio
 				aco.recortar(tmp);
 				aco.print();
-				System.out.print("cierra\n");
+				if (Pact.getXY()==inicio) {
+					System.out.println("cierraC\n");
+				}
+				else {
+					System.out.print("cierra\n");
+				}
 				
 				//Se coloca un precedente para no volver a salir desde la linea por la que se entró
 				Pact.getPrecedente().insert(Lact);
@@ -111,7 +118,25 @@ public class Tablero {
 				//Inserta el area en forma de lista de coordenadas
 				if (Figuras.find(aco)==-1) {
 					Figura F1=new Figura(aco);
+					
+					
+					//Bloque para restar todas las posibles areas que ya existían
+					//Pero fueron "absorbidas"
+					Node tmp2=this.getFiguras().getFirst();
+					
+					while (tmp2!=null) {
+						Figura Fact=((Figura)tmp2.getInfo());
+						//Si resulta que un área anterior es subfigura de una nueva se debe restar su área
+						//para una cuestión de puntaje
+						if (F1.subfig(Fact)) {
+							F1.setArea(F1.getArea()-Fact.getArea());
+						}
+						tmp2=tmp2.getNext();
+					}
+					
+					//Al final se inserta la nueva figura a la lista de figuras
 					this.Figuras.insert(F1);
+					
 				}
 				
 				return null;
@@ -123,7 +148,7 @@ public class Tablero {
 				 System.out.print("$");
 				 //Se reinicia como si fuera un caso de múltiples inicios
 				 //Con el mismo acomulado y se ignora la linea actual
-				 recorrido(Pact.getXY(),aco.copy().copy(),Lact,0);
+				 recorrido(inicio,Pact.getXY(),aco.copy().copy(),Lact,0);
 				 return null;
 			 }
 			 
@@ -135,7 +160,7 @@ public class Tablero {
 			 Lact=(Linea)L_rest.get(0);}
 		 
 		//No se encontraron areas entonces solo se detiene la ejecución
-		return null;
+		return new List();
 	}
 	
 	public void dibujar (Linea L1) {
