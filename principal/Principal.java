@@ -24,12 +24,16 @@ public class Principal {
 		Linea L4=new Linea(21,11,T1);
 		Linea L5=new Linea(11,01,T1);
 		Linea L6=new Linea(11,20,T1);
-		T1.recorrido(11,11, Li, L0, 0);
+		T1.recorrido(20,20, Li.copy(), L0, 0);
+		
 		
 		Linea L7=new Linea(01,00,T1);
-		T1.recorrido(01,01, Li, L0, 0);
+		T1.recorrido(01,01, Li.copy(), L0, 0);
 		
-		/*Linea L8=new Linea(12,11,T1);*/
+		Linea L9=new Linea(01,02,T1);
+		Linea L10=new Linea(02,11,T1);
+		T1.recorrido(02,02, Li.copy(), L0, 0);
+		
 		/*Linea L9=new Linea(02,11,T1);*/
 		T1.show2();
 		//T1.recorrido(10,10, Li, L0, 0);

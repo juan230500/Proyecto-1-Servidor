@@ -9,7 +9,6 @@ public class Figura {
 	public Figura(List puntos) {
 		this.Puntos=puntos;
 		this.Area=this.calc_area();
-		
 	}
 	
 	/**
@@ -74,12 +73,13 @@ public class Figura {
 			//System.out.println("el determinante es "+det+" para el punto "+tmp.getInfo());
 			tmp=tmp.getNext();
 			//Caso que todos los lados coincidan entonces es la misma figura
-			if (tmp==null) {
+			if (tmp==null && det==1) {
 				return true;
 			}
 		}
 		//Con que haya un punto afuera ya se toma que el resto de la figura lo está
-		//Debido a que como es un área de recorrido debió pasar alrededor de toda la figura oevitarla por completo
+		//Debido a que como es un área de recorrido debió pasar 
+		//alrededor de toda la figura o evitarla por complet
 		if (det==0) {
 			return true;
 		}

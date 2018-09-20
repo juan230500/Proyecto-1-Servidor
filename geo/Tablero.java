@@ -74,9 +74,12 @@ public class Tablero {
 			// El nuevo recorrido empezará con su cont en una unidad más
 			// Con lo cual tomará otro primer elemento para su camino lineal
 			//Hasta el punto que se cubran todos los caminos lineales que hay en el inicio
+			 
 			 if(recorrido(inicio,ubi,aco.copy().copy(),ig,cont+1)==null) {
+				 aco.print();
+				 System.out.println("FIN");
 				 return null;
-			 };
+			 }
 		 }
 
 		 
@@ -93,6 +96,8 @@ public class Tablero {
 		 aco.insert(Pact.getXY());
 		 
 		 while(L_rest.getSize()>0) { //ciclo para recorrido lineal
+			 aco.print();
+			 System.out.println(Pact.getXY());
 			 
 			 //Se actualiza el punto a la siguiente conexión de la linea actual
 			 Pact=Lact.conecta(Pact);
@@ -110,6 +115,7 @@ public class Tablero {
 				}
 				else {
 					System.out.print("cierra\n");
+					return new List();
 				}
 				
 				//Se coloca un precedente para no volver a salir desde la linea por la que se entró
@@ -128,9 +134,22 @@ public class Tablero {
 						Figura Fact=((Figura)tmp2.getInfo());
 						//Si resulta que un área anterior es subfigura de una nueva se debe restar su área
 						//para una cuestión de puntaje
-						if (F1.subfig(Fact)) {
-							F1.setArea(F1.getArea()-Fact.getArea());
+						if (F1.getPuntos().getSize()>Fact.getPuntos().getSize()) {
+							if (F1.subfig(Fact)) {
+								F1.getPuntos().print();
+								System.out.print("contiene a ");
+								Fact.getPuntos().print();
+								F1.setArea(F1.getArea()-Fact.getArea());
+							}
+							}
+						else {
+							if (Fact.subfig(F1)) {
+								Fact.getPuntos().print();
+								System.out.print("contiene a ");
+								F1.getPuntos().print();
+								Fact.setArea(Fact.getArea()-F1.getArea());
 						}
+							}
 						tmp2=tmp2.getNext();
 					}
 					
