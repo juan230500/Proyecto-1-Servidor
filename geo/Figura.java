@@ -5,10 +5,47 @@ public class Figura {
 	List Puntos;
 	Jugador Creador;
 	float Area;
+	List vertices;
+	Tablero Tablero_juego;
 	
-	public Figura(List puntos) {
+	public Figura(List puntos,Tablero tablero) {
 		this.Puntos=puntos;
+		this.Tablero_juego=tablero;
+		this.vertices=this.vertices();
 		this.Area=this.calc_area();
+	}
+	
+	/**
+	 * Devuelve los puntos ordenados de la figura pero con el primero de la lista como un cierto punto
+	 * Se usa para seguir la trayectoria de una figura preconstruida
+	 * @param el elemento que será el primero de la rotada
+	 * @return lista rotada con el primer elemento deseado
+	 */
+	public List rotacion(int el) {
+		//Lista donde se guardará la rotación
+		List rotada= new List();
+		
+		Node tmp=this.Puntos.getFirst();
+		//Coloca el puntero en el elemento que se desea sea el primero
+		while((int)tmp.getInfo()!=el) {
+			tmp=tmp.getNext();
+		}
+		//Inserta desde ese elemento es adelante
+		while (tmp!=null) {
+			rotada.insert(tmp.getInfo());
+			tmp=tmp.getNext();
+		}
+		
+		tmp=this.Puntos.getFirst();
+		//Inserta los que queden al inicio de la lista de puntos hasta el elemento de nuevo
+		while((int)tmp.getInfo()!=el) {
+			rotada.insert(tmp.getInfo());
+			tmp=tmp.getNext();
+		}
+		
+		rotada.copy().print();
+		//Se invierte la lista ya que al insertar los elementos quedan al revés de la original
+		return rotada.copy();
 	}
 	
 	/**
@@ -59,34 +96,6 @@ public class Figura {
 			return 0;
 		}
 	}
-	/**
-	 * Método que determina si una figura contiene a otra subfigura del todo
-	 * @param F1 la subfigura a evaluar
-	 * @return true si la subfigura está dentro, false de lo contrario
-	 */
-	public boolean subfig(Figura F1) {
-		Node tmp=F1.getPuntos().getFirst();
-		int det=1;
-		//El determinante 1 no decide
-		while (det==1) {
-			det=bloqueo((int)tmp.getInfo());
-			//System.out.println("el determinante es "+det+" para el punto "+tmp.getInfo());
-			tmp=tmp.getNext();
-			//Caso que todos los lados coincidan entonces es la misma figura
-			if (tmp==null && det==1) {
-				return true;
-			}
-		}
-		//Con que haya un punto afuera ya se toma que el resto de la figura lo está
-		//Debido a que como es un área de recorrido debió pasar 
-		//alrededor de toda la figura o evitarla por complet
-		if (det==0) {
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
 	
 	/**
 	 * Metodo que devuelve la cantidad de vértices
@@ -96,7 +105,6 @@ public class Figura {
 	public List vertices() {
 		//dos nodos para comparar si el cambio entre puntos corresponde a un vertice
 		Node tmp=Puntos.getFirst();
-		Node tmp2=tmp.getNext(); 
 		
 		//Pendiente imposible para la primera evaluación
 		float pendiente=20;
@@ -104,36 +112,46 @@ public class Figura {
 		//Lista donde guardar los vértices
 		List L1=new List();
 		
-		while (tmp2!=null) {
-			int p1=(int)tmp.getInfo();
-			int p2=(int)tmp2.getInfo(); //Los puntos se extran como dos cifras xy
-			
-			if (Math.abs(p1-p2)==pendiente ){ //Caso de no vertice
-				//Caso 1 los puntos comparten x
-				//Caso 2 los puntos comparten y
-				//Caso 3 los puntos siguen la misma diagonal
-			}
-			else { //caso de vertice
+		//Coordenadas del punto anterior
+		int p1=(int)tmp.getInfo();
+		
+		//Se añade la figura nueva a ese punto
+		Tablero_juego.get(p1).add(this);
+		
+		tmp=tmp.getNext();
+		
+		//Coordenadas del punto actual
+		int p2=(int)tmp.getInfo();
+		
+		pendiente=Math.abs(p1-p2);
+		
+		while (tmp!=null) {
+			p2=(int)tmp.getInfo();
+			//Caso 1 los puntos comparten x
+			//Caso 2 los puntos comparten y
+			//Caso 3 los puntos siguen la misma diagonal
+			if (Math.abs(p1-p2)!=pendiente ){
 				L1.insert(p1);
 			}
 			
 			pendiente=Math.abs(p1-p2); //Se actualiza la nueva pendiente y los nodos se avanzan
-			tmp=tmp2;
-			tmp2=tmp2.getNext();
+			p1=p2;
+			tmp=tmp.getNext();
+			
+			//Se añade la figura nueva a ese punto
+			Tablero_juego.get(p1).add(this);
 		}
-		
+		p1=(int)(Puntos.getFirst().getInfo());
+
 		//Evaluacion al final del recorrido para el primer punto
-		int p1=(int)tmp.getInfo();
-		int p2=(int)Puntos.getFirst().getInfo();
 		if (Math.abs(p1-p2)!=pendiente ){
-			L1.insert(p1);
+			L1.insert(p2);
 		}
-		
 		return L1;
 	}
 	
 	public void forma() {
-		List L1=this.vertices();
+		List L1=this.vertices;
 		//Caso de cuadrilátero
 		int tam=L1.getSize();
 		if (tam==4) {
@@ -197,7 +215,7 @@ public class Figura {
 	 */
 	public float calc_area() { 
 		//Fórmula de Gauss para áreas
-		Node tmp=this.vertices().getFirst();
+		Node tmp=this.vertices.getFirst();
 		Node aux=tmp;
 		Node tmp2=tmp.getNext();
 		float area=0;
@@ -245,6 +263,10 @@ public class Figura {
 
 	public void setArea(float area) {
 		Area = area;
+	}
+
+	public List getVertices() {
+		return vertices;
 	}
 
 	

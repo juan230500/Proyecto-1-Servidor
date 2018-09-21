@@ -8,6 +8,7 @@ public class Punto {
 	List Lineas;
 	List Precedente;
 	boolean bloqueo_d;
+	List Figuras;
 	
 	
 	public Punto(int xy) {
@@ -16,6 +17,7 @@ public class Punto {
 		bloqueo_d=false;
 		Lineas=new List();
 		Precedente=new List();
+		Figuras=new List();
 	}
 	/**
 	 * Agrega una linea dentro de la lsita de lineas del punto
@@ -23,6 +25,14 @@ public class Punto {
 	 */
 	public void add(Linea L1) {
 		Lineas.insert(L1);
+	}
+	
+	/**
+	 * Agrega una figura dentro de la lsita de figuras del punto
+	 * @param L1 figura a gregar
+	 */
+	public void add(Figura F1) {
+		Figuras.insert(F1);
 	}
 	
 	/**
@@ -82,6 +92,9 @@ public class Punto {
 	}
 	public void setBloqueo_d(boolean bloqueo_d) {
 		this.bloqueo_d = bloqueo_d;
+	}
+	public List getFiguras() {
+		return Figuras;
 	}
 	
 
