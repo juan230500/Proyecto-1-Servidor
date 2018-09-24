@@ -68,6 +68,10 @@ public class Punto {
 		 }
 		 return lt;
 	 }
+	 
+	 public void addPrecedente(Linea L1) {
+		 Precedente.insert(L1);
+	 }
 
 	public int getXY() {
 		return XY;

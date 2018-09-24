@@ -66,44 +66,106 @@ public class Tablero {
 	  * @return un booleano en caso de recursividad para bloquear algunas recursiones
 	  */
 	 public boolean recorrer2(int pri,int act,Linea ig, List aco) {
+		 int seg=aco.getSize();
 		 Punto Pact=this.get(act);
 		 List L_rest=Pact.get_rest(ig);
-		 Linea Lact;
+		 Linea Lact=ig;
+		 List Figs=new List();
 		 
 		 while (L_rest.getSize()>0) {
-			 aco.insert(Pact.getXY());
+			 act=Pact.getXY();
+			 aco.print();
+			 System.out.println(act);
 			 
-			 if (L_rest.getSize()>1) {
-				 List Fig=Pact.getFiguras();
-				 //Caso de tocar una figura preconstruida
-				 if (Fig.getSize()>0) {
-					 ((Figura)Fig.get(0)).getVertices().print();
-					 System.out.println("Se toca la figura");
-					 return false;
-				 }
-				 //Caso de bifurcación simple 
-				 else {
-					 System.out.println("Se toca la bifucación");
-					 return false;
-				 }
-			 }
-			 
-			 if (Pact.getXY()==pri) {
+			 if (aco.find(act)!=-1){
 				 aco.print();
 				 System.out.println("cierra");
-				 
-				 Figura F1=new Figura(aco,this);
-				 this.Figuras.insert(F1);
+				 Pact.addPrecedente(Lact);
 				 
 				 return false;
 			 }
+			 if (act==pri) {
+				 aco.insert(act);
+				 aco.print();
+				 System.out.println("cierraC con "+(++seg)+" segmentos");
+				 Pact.addPrecedente(Lact);
+				 Figura F1=new Figura(aco,this);
+				 this.Figuras.insert(F1);
+				 
+				 return true;
+			 }
+			 
+			 if (L_rest.getSize()>1) {
+				 List Figtmp=Pact.getFiguras();
+				 //Caso de tocar una figura preconstruida
+				 if (Figtmp.getSize()>0) {
+					 Node tmp=Figtmp.getFirst();
+					 while (tmp!=null) {
+						 Figs.insert(tmp.getInfo());
+						 ((Figura)tmp.getInfo()).getVertices().print();
+						 System.out.println("se toca con ");
+						 tmp=tmp.getNext();
+					 }
+					 /*((Figura)Fig.get(0)).getVertices().print();
+					 iFigs.insert(act);
+					 Figs.insert(((Figura)Fig.get(0)));
+					 List rotada=((Figura)Fig.get(0)).rotacion(act);
+					 rotada.print();
+					 
+					 //Bloque para elejir correctamente el camino por la figura preconstruida
+					 Node tmp=rotada.getFirst().getNext();
+					 L_rest=Pact.get_rest(Lact);
+					 Lact=(Linea)L_rest.get(0);
+					 for (int i=0;Lact.conecta(Pact).getXY()!=(int)tmp.getInfo();i++) {
+						 Lact=(Linea)L_rest.get(i);
+					 }
+					 Pact=Lact.conecta(Pact);
+					 
+					 //Cuando se encuentren tres lineas en un punto significa una posible salidad dela figura
+					 while (Pact.getLineas().getSize()<3) {
+						 System.out.println(Pact.getLineas().getSize());
+						 L_rest=Pact.get_rest(Lact);
+						 Lact=(Linea)L_rest.get(0);
+						 Pact=Lact.conecta(Pact);
+						 act=Pact.getXY();
+					 }
+					 fFigs.insert(act);
+					 System.out.println("Sale por "+act);
+					 System.out.println("Se toca la figura en "+iFigs.getFirst().getInfo());
+					 
+					 return false;*/
+				 }
+				 //Caso de bifurcación simple 
+				 
+				 //Bloque para generar nuevos caminos
+				 Node tmp=L_rest.getFirst();
+				 aco.insert(act);
+				 while(tmp!=null) {
+					 Lact=(Linea)tmp.getInfo();
+					 if (Pact.getPrecedente().find(Lact)!=-1) {
+						 Pact.getPrecedente().extract_o(Lact);
+						 System.out.println("Se bloquea por precedencia el camino por "+Lact.conecta(Pact).getXY());
+						 return false;
+					 }
+					 System.out.println("Se sigue el camino por "+Lact.conecta(Pact).getXY());
+					 if(this.recorrer2(pri,Lact.conecta(Pact).getXY(), Lact, aco.copy().copy())) {
+						 break;
+					 }
+					 tmp=tmp.getNext();
+				 }
+				 return true;
+				 
+			 }
+			 
+			 seg++;
 			 Lact=(Linea)L_rest.get(0);
 			 Pact=Lact.conecta(Pact);
 			 L_rest=Pact.get_rest(Lact);
+			 aco.insert(act);
 		 }
 		 aco.print();
 		 System.out.println("no cierra");
-		 return true;
+		 return false;
 	 }
 	
 	public void dibujar (Linea L1) {

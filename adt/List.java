@@ -23,6 +23,22 @@ public class List {
 	  }
 	  
 	  /**
+	   * Combina una lista conectando su ultimo elemento con el primero de una con la otra
+	   * @param L
+	   */
+	  public void comb(List L) {
+		  Node tmp=this.first;
+		  
+		  //Se para en el último elemento
+		  while (tmp.getNext()!=null) {
+			  tmp=tmp.getNext();
+		  }
+		  //Se coloca como siguiente el primero de la otra lista
+		  tmp.setNext(L.getFirst());
+		  this.size+=L.getSize();
+	  }
+	  
+	  /**
 	   * Elimina el primer elemento de una lista enlazada
 	   * @return elobjeto eliminado
 	   */
@@ -126,6 +142,24 @@ public class List {
 		  //las posicion a recortar el igual a los nodos que se conservan más 1
 		  this.size=pos+1;
 		  tmp.setNext(null);
+	  }
+	  /**
+	   * Busca y recorta la lista  a partir de un cierto elemento
+	   * @param o el elemento límite
+	   */
+	  public void find_rect(Object o) {
+		  Node tmp=this.first;
+		  int c=0;
+		  while (tmp!=null) {
+			  if (tmp.getInfo()==o) {
+				  this.size=c+1;
+				  tmp.setNext(null);
+				  return;
+			  }
+			  tmp=tmp.getNext();
+			  c++;
+		  }
+		  return;
 	  }
 	  /**
 	   * Busca dos posiciones en la lista y elimina todos los elementos

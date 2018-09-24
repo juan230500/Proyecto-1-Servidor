@@ -3,7 +3,7 @@ import geo.*;
 import adt.*;
 
 public class Principal {
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		/*List L1=new List();
 		L1.insert(2);
 		L1.insert(5);
@@ -18,19 +18,15 @@ public class Principal {
 		List Li=new List();
 		
 		
-		Linea L1=new Linea(00,01,T1);
-		Linea L2=new Linea(01,11,T1);
-		Linea L3=new Linea(11,21,T1);
-		Linea L4=new Linea(21,20,T1);
-		Linea L5=new Linea(20,10,T1);
-		Linea L6=new Linea(10,00,T1);
+		Linea L1=new Linea(00,10,T1);
+		Linea L2=new Linea(10,20,T1);
+		Linea L3=new Linea(20,21,T1);
+		Linea L4=new Linea(21,11,T1);
+		Linea L6=new Linea(11,10,T1);
+		T1.recorrer2(11, 10, L6, Li.copy());
 		
-		
-		T1.recorrer2(10, 00, L6, Li.copy());
-		
-		Linea L7=new Linea(02,01,T1);
-		
-		T1.recorrer2(02, 01, L7, Li.copy());
+		Linea L5=new Linea(11,00,T1);
+		T1.recorrer2(11, 00, L5, Li.copy());
 		
 		
 		/*Linea L5=new Linea(11,01,T1);
@@ -55,18 +51,14 @@ public class Principal {
 		
 		//Se pueden imprimir solo los vértices de todas las figuras
 		//Se prueba la identificación de figuras
-		Node tmp=T1.getFiguras().getFirst();
+		/*Node tmp=T1.getFiguras().getFirst();
 		
 		while (tmp!=null) {
 		((Figura)tmp.getInfo()).getVertices().print();
 		System.out.println(((Figura)tmp.getInfo()).getArea());
 		((Figura)tmp.getInfo()).rotacion(11);
 		tmp=tmp.getNext();
-		}
-	
-	
-		
-		
+		}*/
 		
 	}
 

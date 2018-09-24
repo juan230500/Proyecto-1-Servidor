@@ -43,7 +43,6 @@ public class Figura {
 			tmp=tmp.getNext();
 		}
 		
-		rotada.copy().print();
 		//Se invierte la lista ya que al insertar los elementos quedan al revés de la original
 		return rotada.copy();
 	}
@@ -106,8 +105,8 @@ public class Figura {
 		//dos nodos para comparar si el cambio entre puntos corresponde a un vertice
 		Node tmp=Puntos.getFirst();
 		
-		//Pendiente imposible para la primera evaluación
-		float pendiente=20;
+		//Pendiente para la primera evaluación
+		float pendiente;
 		
 		//Lista donde guardar los vértices
 		List L1=new List();
@@ -126,6 +125,7 @@ public class Figura {
 		pendiente=Math.abs(p1-p2);
 		
 		while (tmp!=null) {
+			
 			p2=(int)tmp.getInfo();
 			//Caso 1 los puntos comparten x
 			//Caso 2 los puntos comparten y
@@ -146,6 +146,11 @@ public class Figura {
 		//Evaluacion al final del recorrido para el primer punto
 		if (Math.abs(p1-p2)!=pendiente ){
 			L1.insert(p2);
+		}
+		pendiente=Math.abs(p1-p2);
+		p2=(int)(Puntos.getFirst().getNext().getInfo());
+		if (Math.abs(p1-p2)!=pendiente ){
+			L1.insert(p1);
 		}
 		return L1;
 	}
