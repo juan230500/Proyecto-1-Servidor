@@ -19,14 +19,16 @@ public class Principal {
 		
 		
 		Linea L1=new Linea(00,10,T1);
+		Linea L9=new Linea(00,01,T1);
 		Linea L2=new Linea(10,20,T1);
-		Linea L3=new Linea(20,21,T1);
+		Linea L3=new Linea(20,30,T1);
 		Linea L4=new Linea(21,11,T1);
 		Linea L6=new Linea(11,10,T1);
-		T1.recorrer2(11, 10, L6, Li.copy());
+		Linea L7=new Linea(21,30,T1);
+		T1.recorrer2(11, 10, L6, Li.copy(),0);
 		
-		Linea L5=new Linea(11,00,T1);
-		T1.recorrer2(11, 00, L5, Li.copy());
+		Linea L5=new Linea(01,11,T1);
+		T1.recorrer2(11, 01, L5, Li.copy(),0);
 		
 		
 		/*Linea L5=new Linea(11,01,T1);

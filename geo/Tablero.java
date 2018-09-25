@@ -65,8 +65,7 @@ public class Tablero {
 	  * @param aco la lista de puntos que irá guadando el recorrido
 	  * @return un booleano en caso de recursividad para bloquear algunas recursiones
 	  */
-	 public boolean recorrer2(int pri,int act,Linea ig, List aco) {
-		 int seg=aco.getSize();
+	 public boolean recorrer2(int pri,int act,Linea ig, List aco,int seg) {
 		 Punto Pact=this.get(act);
 		 List L_rest=Pact.get_rest(ig);
 		 Linea Lact=ig;
@@ -98,7 +97,9 @@ public class Tablero {
 			 if (L_rest.getSize()>1) {
 				 List Figtmp=Pact.getFiguras();
 				 //Caso de tocar una figura preconstruida
+				 seg++;
 				 if (Figtmp.getSize()>0) {
+					 //Al tocar un área se restarán n-1 segmentos por los n puntos compartidos
 					 Node tmp=Figtmp.getFirst();
 					 while (tmp!=null) {
 						 Figs.insert(tmp.getInfo());
@@ -148,7 +149,7 @@ public class Tablero {
 						 return false;
 					 }
 					 System.out.println("Se sigue el camino por "+Lact.conecta(Pact).getXY());
-					 if(this.recorrer2(pri,Lact.conecta(Pact).getXY(), Lact, aco.copy().copy())) {
+					 if(this.recorrer2(pri,Lact.conecta(Pact).getXY(), Lact, aco.copy().copy(),seg)) {
 						 break;
 					 }
 					 tmp=tmp.getNext();
@@ -157,7 +158,11 @@ public class Tablero {
 				 
 			 }
 			 
+			 if (Pact.getFiguras().getSize()==0) {
 			 seg++;
+			 System.out.println("suma");}
+			 
+			 
 			 Lact=(Linea)L_rest.get(0);
 			 Pact=Lact.conecta(Pact);
 			 L_rest=Pact.get_rest(Lact);
