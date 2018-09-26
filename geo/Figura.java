@@ -54,33 +54,57 @@ public class Figura {
 	 * @return un valor true si el punto está dentro
 	 */
 	public int bloqueo(int xy){
-		//inspirado en el algoritmo de Jordan
+		//inspirado en el algoritmo de Ray casting
 		if (this.Puntos.find(xy)!=-1){
 			//No decide si pertenece al perímetro
 			return 1;
 		}
-		
 		int cont=0;
-		int vert_aco=-1;
-		
+		vertices.print();
 		while (xy<60){
-			if (this.vertices().find(xy)!=-1){
-				if (vert_aco==-1){
-					vert_aco=xy;
+			int posv=this.vertices.find(xy);
+			if (posv!=-1) {
+				int tam=vertices.getSize();
+				//Se pregunta por los contiguos
+				int con1=(int)vertices.get((posv+1)%tam);
+				int con2=(int)vertices.get((posv-1)%tam);
+				System.out.println("contiguos "+con1+" "+con2);
+				//Se extraen las Y de los contiguos y se guarda la Y actual en tam que ya no se usará
+				con1%=10;
+				con2%=10;
+				tam=xy%10;
+				//Se les resta la Y actual para que estén referenciadas a esta
+				con1-=tam;
+				con2-=tam;
+				//Si ambas son negativas o ambas positivas ese vértice no deberia contarse
+				//porque están ambas debajo o encima del rayo en y
+				//Tambien si alguna es 0 porque estaría a la misma altura del punto actual
+				if (con2*con1==0) {
+					System.out.println("vertice cerrado en "+xy);
+					xy+=10;
+					//Camina hasta el siguiente vértice que debe compartir ese lado paralelo a Y
+					while (this.vertices.find(xy)==-1) {
+						xy+=10;
+					}
+					//Se debe evaluar con respecto a si el siguiente vértice "cambia de altura" para saber si suma como pared
+					int con1aux=((int)vertices.get((posv+1)%tam))%10;
+					int con2aux=((int)vertices.get((posv-1)%tam))%10;
+					if ((con1+con2)*(con1aux+con2aux)<0) {
+						System.out.println("vertice final cerrado en "+xy);
+						cont++;
+					}
+					else {
+						System.out.println("vertice final abierto en "+xy);
+					}
 				}
-				else{
-					vert_aco=-1;
-					
-					cont-=((xy-vert_aco)/10)-1;
+				//Si da negativo el ángulo es agudo hacia arriba o abajo y se ignora en la suma
+				else if (con1*con2<0){
+					System.out.println("vertice abierto en "+xy);
 				}
-				
-				}
-			
+			}
+			//Suma por ser pared definitiva
 			else if (this.Puntos.find(xy)!=-1){
 				cont++;
-			}
-			else{
-				vert_aco=-1;
 			}
 
 			xy+=10;

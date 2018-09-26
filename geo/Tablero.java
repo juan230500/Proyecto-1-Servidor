@@ -5,6 +5,7 @@ public class Tablero {
 	List Puntos;
 	int dim;
 	List Figuras;
+	Figura Ftmp;
 	
 	public Tablero(int dim) {
 		this.dim=dim;
@@ -88,8 +89,9 @@ public class Tablero {
 				 aco.print();
 				 System.out.println("cierraC con "+(++seg)+" segmentos");
 				 Pact.addPrecedente(Lact);
-				 Figura F1=new Figura(aco,this);
-				 this.Figuras.insert(F1);
+				 Ftmp=new Figura(aco,this);
+				 /*Figura F1=new Figura(aco,this);
+				 this.Figuras.insert(F1);*/
 				 
 				 return true;
 			 }
@@ -172,7 +174,77 @@ public class Tablero {
 		 System.out.println("no cierra");
 		 return false;
 	 }
-	
+	 
+	 public boolean recorrer3(int pri,int act,Linea ig, List aco, Figura Ftmp) {
+		 Punto Pact=this.get(act);
+		 List L_rest=Pact.get_rest(ig);
+		 Linea Lact=ig;
+		 List Figs=new List();
+		 
+		 while (L_rest.getSize()>0) {
+			 act=Pact.getXY();
+			 aco.print();
+			 System.out.println(act);
+			 
+			 if (aco.find(act)!=-1){
+				 aco.print();
+				 System.out.println("cierra");
+				 Pact.addPrecedente(Lact);
+				 
+				 return false;
+			 }
+			 if (act==pri) {
+				 aco.insert(act);
+				 aco.print();
+				 System.out.println("cierraC con ");
+				 Pact.addPrecedente(Lact);
+				 Ftmp=new Figura(aco,this);
+				 /*Figura F1=new Figura(aco,this);
+				 this.Figuras.insert(F1);*/
+				 
+				 return true;
+			 }
+			 
+			 if (L_rest.getSize()>1) {
+				 List Figtmp=Pact.getFiguras();
+				 //Caso de tocar una figura preconstruida
+				 if (Figtmp.getSize()>0) {
+					 
+					
+				 }
+				 //Caso de bifurcación simple 
+				 
+				 //Bloque para generar nuevos caminos
+				 Node tmp=L_rest.getFirst();
+				 aco.insert(act);
+				 while(tmp!=null) {
+					 Lact=(Linea)tmp.getInfo();
+					 if (Pact.getPrecedente().find(Lact)!=-1) {
+						 Pact.getPrecedente().extract_o(Lact);
+						 System.out.println("Se bloquea por precedencia el camino por "+Lact.conecta(Pact).getXY());
+						 return false;
+					 }
+					 System.out.println("Se sigue el camino por "+Lact.conecta(Pact).getXY());
+					 if(this.recorrer3(pri,Lact.conecta(Pact).getXY(), Lact, aco.copy().copy(),Ftmp)) {
+						 break;
+					 }
+					 tmp=tmp.getNext();
+				 }
+				 return true;
+				 
+			 }
+			
+			 
+			 
+			 Lact=(Linea)L_rest.get(0);
+			 Pact=Lact.conecta(Pact);
+			 L_rest=Pact.get_rest(Lact);
+			 aco.insert(act);
+		 }
+		 aco.print();
+		 System.out.println("no cierra");
+		 return false;
+	 }
 	public void dibujar (Linea L1) {
 		
 	}
@@ -192,5 +264,9 @@ public class Tablero {
 
 	public List getFiguras() {
 		return Figuras;
+	}
+
+	public Figura getFtmp() {
+		return Ftmp;
 	}
 }

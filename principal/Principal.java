@@ -18,17 +18,18 @@ public class Principal {
 		List Li=new List();
 		
 		
-		Linea L1=new Linea(00,10,T1);
-		Linea L9=new Linea(00,01,T1);
-		Linea L2=new Linea(10,20,T1);
-		Linea L3=new Linea(20,30,T1);
-		Linea L4=new Linea(21,11,T1);
-		Linea L6=new Linea(11,10,T1);
-		Linea L7=new Linea(21,30,T1);
-		T1.recorrer2(11, 10, L6, Li.copy(),0);
-		
-		Linea L5=new Linea(01,11,T1);
-		T1.recorrer2(11, 01, L5, Li.copy(),0);
+		Linea L1=new Linea(10,20,T1);
+		Linea L2=new Linea(20,30,T1);
+		Linea L3=new Linea(30,31,T1);
+		Linea L4=new Linea(31,32,T1);
+		Linea L5=new Linea(32,22,T1);
+		Linea L6=new Linea(23,12,T1);
+		Linea L7=new Linea(12,11,T1);
+		Linea L8=new Linea(11,10,T1);
+		Linea L9=new Linea(22,23,T1);
+		T1.recorrer2(11, 10, L8, Li.copy(),0);
+		Figura Fact=T1.getFtmp();
+		System.out.println(Fact.bloqueo(21));
 		
 		
 		/*Linea L5=new Linea(11,01,T1);
