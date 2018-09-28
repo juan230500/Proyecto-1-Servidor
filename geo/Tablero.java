@@ -88,7 +88,6 @@ public class Tablero {
 				 aco.insert(act);
 				 aco.print();
 				 System.out.println("cierraC con "+(++seg)+" segmentos");
-				 Pact.addPrecedente(Lact);
 				 Ftmp=new Figura(aco,this);
 				 /*Figura F1=new Figura(aco,this);
 				 this.Figuras.insert(F1);*/
@@ -209,8 +208,12 @@ public class Tablero {
 				 List Figtmp=Pact.getFiguras();
 				 //Caso de tocar una figura preconstruida
 				 if (Figtmp.getSize()>0) {
+					 Linea L1=(Linea)L_rest.get(0);
+					 Linea L2=(Linea)L_rest.get(1);
+					 int xy1=L1.conecta(Pact).getXY();
+					 int xy2=L2.conecta(Pact).getXY();
+					 System.out.println(xy1+"bloqueo"+Ftmp.bloqueo(xy1, false)+"\t"+xy2+"bloqueo"+Ftmp.bloqueo(xy2,false));
 					 
-					
 				 }
 				 //Caso de bifurcación simple 
 				 

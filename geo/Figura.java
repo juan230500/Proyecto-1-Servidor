@@ -53,14 +53,14 @@ public class Figura {
 	 * @param xy el punto a preguntar si esta cerrado
 	 * @return un valor true si el punto está dentro
 	 */
-	public int bloqueo(int xy){
+	public int bloqueo(int xy,boolean esp){
 		//inspirado en el algoritmo de Ray casting
-		if (this.Puntos.find(xy)!=-1){
+		//Un booleano esp para los casos donde se requiere ver si un punto muy cercano a la figura por la izquierda está dentro
+		if (this.Puntos.find(xy)!=-1 && !esp){
 			//No decide si pertenece al perímetro
 			return 1;
 		}
 		int cont=0;
-		vertices.print();
 		while (xy<60){
 			int posv=this.vertices.find(xy);
 			if (posv!=-1) {
@@ -72,10 +72,10 @@ public class Figura {
 				//Se extraen las Y de los contiguos y se guarda la Y actual en tam que ya no se usará
 				con1%=10;
 				con2%=10;
-				tam=xy%10;
+				int aux=xy%10;
 				//Se les resta la Y actual para que estén referenciadas a esta
-				con1-=tam;
-				con2-=tam;
+				con1-=aux;
+				con2-=aux;
 				//Si ambas son negativas o ambas positivas ese vértice no deberia contarse
 				//porque están ambas debajo o encima del rayo en y
 				//Tambien si alguna es 0 porque estaría a la misma altura del punto actual
@@ -85,8 +85,10 @@ public class Figura {
 					//Camina hasta el siguiente vértice que debe compartir ese lado paralelo a Y
 					while (this.vertices.find(xy)==-1) {
 						xy+=10;
+						
 					}
 					//Se debe evaluar con respecto a si el siguiente vértice "cambia de altura" para saber si suma como pared
+					System.out.println(tam);
 					int con1aux=((int)vertices.get((posv+1)%tam))%10;
 					int con2aux=((int)vertices.get((posv-1)%tam))%10;
 					if ((con1+con2)*(con1aux+con2aux)<0) {
@@ -118,6 +120,100 @@ public class Figura {
 			//Caso de que está dentro de la figura
 			return 0;
 		}
+	}
+	/**
+	 * método que funciona como extensión el método bloqueo() 
+	 * y sirve para, por medio de casos, ver si el punto medio de una linea 
+	 * esta dentro a afuera de una figura
+	 * @param inc punto inicial de la linea
+	 * @param fin punto fianl de la linea
+	 */
+	public void bloqueoL(int inc, int fin) {
+		boolean op;
+		int bloqueof;
+		//Se establece el tamaño de la figura para buscar puntos contiguos
+		int tam=Puntos.getSize();
+		//Se busca la posicion del punto de inicio de la linea
+		int posp=this.Puntos.find(inc);
+		//Se extraen los contiguos
+		int contig1=(int)Puntos.get((posp+1)%tam);
+		int contig2=(int)Puntos.get((posp-1)%tam);
+		//Se extraen sus coordenadas en Y porque estas definirán uno de los 3 casos:
+		//que se toque un pared en Y, una pared en X o una esquina
+		int yinc=inc%10;
+		int y1=contig1%10-yinc;
+		int y2=contig2%10-yinc;
+		System.out.println(y1+"\t"+y2);
+		System.out.println(contig1+"\t"+contig2);
+		//Caso pared Y
+		if (y1==y2) {
+			//Se camina hacia la izquierda para encontrar una pared decisiva
+			inc-=10;
+			while (inc>0) {
+				posp=this.Puntos.find(inc);
+				//Por fin encontro la esquina
+				if (posp!=-1) {
+					tam=vertices.getSize();
+					contig1=(int)vertices.get((tam+posp+1)%tam);
+					contig2=(int)vertices.get((tam+posp-1)%tam);
+					y1=contig1%10-yinc;
+					y2=contig2%10-yinc;
+				}
+				inc-=10;
+			}
+			System.out.println(yinc+"V"+contig1+"\t"+contig2);
+			//Se prepara para comparar con el Y del punto final
+			int yfin=fin%10-yinc;
+			//Se define cual contiguo está paralelo a Y y cual no;
+			if (y1-yinc==0) {
+				//Caso en el que están uno arriba del otro
+				if (y2*yfin<0) {
+					System.out.println("opuesto signo");
+					op=true;
+				}
+				else {
+					System.out.println("mismo signo");
+					op=false;
+				}
+			}
+			else {
+				//Caso en el que están uno arriba del otro
+				if (y1*yfin<0) {
+					System.out.println("opuesto signo");
+					op=true;
+				}
+				else {
+					System.out.println("mismo signo");
+					op=false;
+				}
+			}
+			inc+=10;
+			System.out.print(inc);
+			bloqueof=this.bloqueo(inc, true);
+			
+		}
+		//Caso de esquina
+		else if(y1*y2>=0) {
+			System.out.println("mismo signo");
+			op=false;
+			bloqueof=this.bloqueo(inc+10, true);
+		}
+		//Caso pared en X
+		else {
+			System.out.println("opuesto signo");
+			op=true;
+			bloqueof=this.bloqueo(inc, true);
+		}
+		System.out.println("#"+inc);
+		
+		if (op) {
+			System.out.println("opuesto"+bloqueof);
+		}
+		else {
+			System.out.println("mismo"+bloqueof);
+		}
+		System.out.println("#");
+		
 	}
 	
 	/**
