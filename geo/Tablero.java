@@ -36,6 +36,12 @@ public class Tablero {
 		return (Punto)((List)Puntos.get(x)).get(y);
 	}
 	
+	public void addL(int xy1,int xy2) {
+		Linea L1=new Linea(xy1,xy2,this);
+		this.get(xy1).add(L1);
+		this.get(xy2).add(L1);
+	}
+	
 	public void show() {
 		for (int i=0;i<dim;i++) {
 			for (int j=0;j<dim;j++) {
