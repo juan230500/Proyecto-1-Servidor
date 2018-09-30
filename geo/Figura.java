@@ -128,91 +128,157 @@ public class Figura {
 	 * @param inc punto inicial de la linea
 	 * @param fin punto fianl de la linea
 	 */
-	public void bloqueoL(int inc, int fin) {
-		boolean op;
-		int bloqueof;
-		//Se establece el tamaño de la figura para buscar puntos contiguos
-		int tam=Puntos.getSize();
-		//Se busca la posicion del punto de inicio de la linea
-		int posp=this.Puntos.find(inc);
-		//Se extraen los contiguos
-		int contig1=(int)Puntos.get((posp+1)%tam);
-		int contig2=(int)Puntos.get((posp-1)%tam);
-		//Se extraen sus coordenadas en Y porque estas definirán uno de los 3 casos:
-		//que se toque un pared en Y, una pared en X o una esquina
-		int yinc=inc%10;
-		int y1=contig1%10-yinc;
-		int y2=contig2%10-yinc;
-		System.out.println(y1+"\t"+y2);
-		System.out.println(contig1+"\t"+contig2);
-		//Caso pared Y
-		if (y1==y2) {
-			//Se camina hacia la izquierda para encontrar una pared decisiva
-			inc-=10;
-			while (inc>0) {
-				posp=this.Puntos.find(inc);
-				//Por fin encontro la esquina
-				if (posp!=-1) {
-					tam=vertices.getSize();
-					contig1=(int)vertices.get((tam+posp+1)%tam);
-					contig2=(int)vertices.get((tam+posp-1)%tam);
-					y1=contig1%10-yinc;
-					y2=contig2%10-yinc;
-				}
-				inc-=10;
+	public int bloqueoL(int inc, int fin) {
+			boolean op;
+			int bloqueof;
+			
+			//Adaptacion del incio y fin a los casos esperados
+			if (inc-fin==1) {
+				System.out.println("sin cambios");
 			}
-			System.out.println(yinc+"V"+contig1+"\t"+contig2);
-			//Se prepara para comparar con el Y del punto final
-			int yfin=fin%10-yinc;
-			//Se define cual contiguo está paralelo a Y y cual no;
-			if (y1-yinc==0) {
-				//Caso en el que están uno arriba del otro
-				if (y2*yfin<0) {
-					System.out.println("opuesto signo");
-					op=true;
+			else if(inc-fin==-1) {
+				System.out.println("siempre de abajo a arriba");
+				int tmp=inc;
+				inc=fin;
+				fin=tmp;
+			}
+			else if (inc>fin) {
+					System.out.println("siempre de izquierda a derecha");
+					int tmp=inc;
+					inc=fin;
+					fin=tmp;
+			}
+			
+			//Se establece el tamaño de la figura para buscar puntos contiguos
+			int tam=Puntos.getSize();
+			//Se busca la posicion del punto de inicio de la linea
+			int posp=this.Puntos.find(inc);
+			//Se extraen los contiguos
+			int contig1=(int)Puntos.get(posp+1);
+			int contig2=(int)Puntos.get(posp-1);
+			//Se extraen sus coordenadas en Y porque estas definirian uno de los 3 casos:
+			//que se toque un pared en Y, una pared en X o una esquina
+			int yinc=inc%10;
+			int y1=contig1%10-yinc;
+			int y2=contig2%10-yinc;
+			System.out.println(y1+"\t"+y2);
+			System.out.println(contig1+"\t"+contig2);
+			
+			int det1=y1*y2;
+			if (det1==0) {
+				if (inc-contig1==-10 || inc-contig2==-10) {
+					System.out.println("C");
+					//Bloque para buscar un nuevo vértice y revisar si comparte lado con la linea actual
+					while (inc>0) {
+						posp=this.Puntos.find(inc);
+						//Por fin encontro la esquina
+						if (posp!=-1) {
+							tam=vertices.getSize();
+							contig1=(int)vertices.get((tam+posp+1)%tam);
+							contig2=(int)vertices.get((tam+posp-1)%tam);
+							y1=contig1%10-yinc;
+							y2=contig2%10-yinc;
+						}
+						inc-=10;
+					}
+					System.out.println(yinc+"V"+contig1+"\t"+contig2);
+					//Se prepara para comparar con el Y del punto final
+					int yfin=fin%10-yinc;
+					//Se define cual contiguo esta paralelo a Y y cual no para saber si el valor de adentro es compartido o no
+					if (y1==0) {
+						//Caso en el que estan uno arriba del otro
+						System.out.println(y2+"#"+y1+"%"+yfin);
+						if (y2*yfin<0) {
+							op=true;
+						}
+						else {
+							op=false;
+						}
+					}
+					else {
+						//Caso en el que estan uno arriba del otro
+						if (y1*yfin<0) {
+							op=true;
+						}
+						else {
+							op=false;
+						}
+					}
+					inc+=10;
+					
+					
+					if (op) {
+						bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+					}
+					else {
+						bloqueof=this.bloqueo(inc, true);
+					}
+					
+					System.out.println("retorna "+bloqueof);
+					return bloqueof;
 				}
 				else {
-					System.out.println("mismo signo");
-					op=false;
+					int yfin=fin%10;
+					if (yfin*(y1+y2)<0) {
+						System.out.println("A11");
+						bloqueof=this.bloqueo(inc+10, true);
+						System.out.println("retorna "+bloqueof);
+						return bloqueof;
+					}
+					else {
+						System.out.println("A12");
+						bloqueof=Math.abs(this.bloqueo(inc+10, true)-2);
+						System.out.println("retorna "+bloqueof);
+						return bloqueof;
+					}
+					
 				}
+			}
+			else if (det1>=0) {
+				System.out.println("A2");
+				bloqueof=this.bloqueo(inc, true);
+				System.out.println("retorna "+bloqueof);
+				return bloqueof;
 			}
 			else {
-				//Caso en el que están uno arriba del otro
-				if (y1*yfin<0) {
-					System.out.println("opuesto signo");
-					op=true;
+				int yfin=fin%10;
+				if (Math.abs(inc-fin)>=9) {
+					System.out.println("B1");
+					bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+					System.out.println("retorna "+bloqueof);
+					return bloqueof;
 				}
 				else {
-					System.out.println("mismo signo");
-					op=false;
+					int x1=contig1%10-yinc;
+					int x2=contig2%10-yinc;
+					if (yfin==y1) {
+						if (x1>0) {
+							System.out.println("B22 por x1");
+							bloqueof=this.bloqueo(inc, true);
+							System.out.println("retorna "+bloqueof);
+							return bloqueof;
+						}
+						else {
+							bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+							System.out.println("retorna "+bloqueof);
+							return bloqueof;
+						}
+					}
+					else {
+						if (x2>0) {
+							System.out.println("B22 por x2");
+							bloqueof=this.bloqueo(inc, true);
+							System.out.println("retorna "+bloqueof);
+							return bloqueof;
+						}
+						else {
+							bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+							System.out.println("retorna "+bloqueof);
+							return bloqueof;
+						}
+					}
 				}
 			}
-			inc+=10;
-			System.out.print(inc);
-			bloqueof=this.bloqueo(inc, true);
-			
-		}
-		//Caso de esquina
-		else if(y1*y2>=0) {
-			System.out.println("mismo signo");
-			op=false;
-			bloqueof=this.bloqueo(inc+10, true);
-		}
-		//Caso pared en X
-		else {
-			System.out.println("opuesto signo");
-			op=true;
-			bloqueof=this.bloqueo(inc, true);
-		}
-		System.out.println("#"+inc);
-		
-		if (op) {
-			System.out.println("opuesto"+bloqueof);
-		}
-		else {
-			System.out.println("mismo"+bloqueof);
-		}
-		System.out.println("#");
 		
 	}
 	

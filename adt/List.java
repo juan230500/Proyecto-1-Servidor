@@ -86,6 +86,12 @@ public class List {
 	   * @return el objeto en esa posición
 	   */
 	  public Object get(int n) {
+		  while (n<0) {
+			  n+=size;
+		  }
+		  while (n>=size) {
+			  n-=size;
+		  }
 		  Node tmp=first;
 		  for (int i=0;i<n;i++) {
 			  tmp=tmp.getNext();

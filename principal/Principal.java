@@ -30,7 +30,7 @@ public class Principal {
 		Linea L7=new Linea(01,11,T1);
 		T1.recorrer2(10, 00, L5, Li.copy(),0);*/
 		Figura Fact=T1.getFtmp();
-		Fact.bloqueoL(21, 30);
+		Fact.bloqueoL(11, 20);
 		
 		
 		
