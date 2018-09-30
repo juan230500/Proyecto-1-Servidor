@@ -60,7 +60,6 @@ public class Cliente {
             S1 = new Socket(ip,puerto);
             DataOutputStream O1=new DataOutputStream(S1.getOutputStream());       
             O1.writeUTF(E1.Shipout());
-            System.out.println(E1.Shipout());
             
             O1.close();
         } catch (UnknownHostException e1) {
