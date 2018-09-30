@@ -7,8 +7,10 @@ public class Cola {
 	public Cola(){
 	inicio=null;
 	termino=null;
-	
 	}
+	
+	
+
 	/**
 	 * Inserta un nuevo elemento en la cola 
 	 * de forma que es el nuevo incio no se modifica

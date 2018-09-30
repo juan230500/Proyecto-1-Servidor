@@ -9,6 +9,38 @@ public class List {
 		//La lsita se inicia con el primer elemento en null
 	    first = null;
 	  }
+	  /**
+	   * Método que convierte una lista de puntos en un array de X
+	   * para que sea más manjejable por la interfaz
+	   * @return el array con los puntos en X de la lista
+	   */
+	  public int[] toarrayX() {
+		  int[] a=new int[size];
+		  int i=0;
+		  Node tmp=this.first;
+		  while (tmp!=null) {
+			  a[i]=(int)((int)tmp.getInfo())/10;
+			  tmp=tmp.getNext();
+			  i++;
+		  }
+		  return a;
+	  }
+	  /**
+	   * Método que convierte una lista de puntos en un array de Y
+	   * para que sea más manjejable por la interfaz
+	   * @return el array con los puntos en Y de la lista
+	   */
+	  public int[] toarrayY() {
+		  int[] a=new int[size];
+		  int i=0;
+		  Node tmp=this.first;
+		  while (tmp!=null) {
+			  a[i]=(int)tmp.getInfo()%10;
+			  tmp=tmp.getNext();
+			  i++;
+		  }
+		  return a;
+	  }
 	  
 	  /**
 	   * Inserta un elemento al inicio de una lista enlazada
