@@ -23,7 +23,7 @@ public class Server implements Runnable {
 	        
 	    }
 	    public Envio escuchar(){
-	            Thread hilo= new Thread(this);
+	        Thread hilo= new Thread(this);
 		    hilo.start();
 	        try {
 	            hilo.join();

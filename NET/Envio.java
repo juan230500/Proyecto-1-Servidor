@@ -105,7 +105,7 @@ public class Envio {
 			else {
 			this.xpos = e.getXpos();
 			this.ypos = e.getYpos();
-			Dibujo = e.getDibujo();
+			this.Dibujo = e.getDibujo();
 			this.escucha = e.isEscucha();}
 			
 			

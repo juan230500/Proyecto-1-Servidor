@@ -99,8 +99,9 @@ public class Figura {
 						System.out.println("vertice final abierto en "+xy);
 					}
 				}
-				//Si da negativo el ángulo es agudo hacia arriba o abajo y se ignora en la suma
+				//Si da negativo el ángulo es agudo hacia arriba o abajo y se suma en el total
 				else if (con1*con2<0){
+					cont++;
 					System.out.println("vertice abierto en "+xy);
 				}
 			}
@@ -219,7 +220,7 @@ public class Figura {
 				}
 				else {
 					int yfin=fin%10;
-					if (yfin*(y1+y2)<0) {
+					if (yfin*(y1+y2)>=0) {
 						System.out.println("A11");
 						bloqueof=this.bloqueo(inc+10, true);
 						System.out.println("retorna "+bloqueof);
