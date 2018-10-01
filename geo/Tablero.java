@@ -10,6 +10,7 @@ public class Tablero {
 	public Tablero(int dim) {
 		this.dim=dim;
 		this.Figuras=new List();
+		this.Ftmp=null;
 		
 		Punto P1=new Punto(00);
 		List L1=new List();
@@ -37,9 +38,9 @@ public class Tablero {
 	}
 	
 	public void addL(int xy1,int xy2) {
-		Linea L1=new Linea(xy1,xy2,this);
-		this.get(xy1).add(L1);
-		this.get(xy2).add(L1);
+		Linea L=new Linea(xy1,xy2,this);
+		this.get(xy1).add(L);
+		this.get(xy2).add(L);
 	}
 	
 	public void show() {
@@ -60,7 +61,106 @@ public class Tablero {
 		}
 	}
 	
-	 
+	 public int gen(int xy1,int xy2) {
+		//Verificación para lineas superpuestas
+		//Revisa si alguna de las lineas del punto p1 lleva al punto p2
+		Punto p1=this.get(xy1);
+		Punto p2=this.get(xy2);
+
+		List Litmp=p1.getLineas();
+		Node tmp=Litmp.getFirst();
+		int val;
+		Linea Ltmp;
+		while (tmp!=null) {
+			Ltmp=(Linea)tmp.getInfo();
+			if (Ltmp.conecta(p1)==p2) {
+				System.out.println("Superpone "+xy1+" con "+xy2);
+				return 0;
+			}
+			tmp=tmp.getNext();
+		}
+		
+		
+		//Verificación para líneas internas
+		//Se apoya en el método bloqueoL para identificar lineas internas
+		
+		List Figs=p1.getFiguras();
+		tmp=Figs.getFirst();
+		Figura Ftmp;
+		while (tmp!=null) {
+			Ftmp=(Figura)tmp.getInfo();
+			Litmp=Ftmp.getPuntos();
+			if (Litmp.find(xy2)!=-1) {
+				if (Ftmp.bloqueoL(xy1, xy2)==0) {
+					System.out.println("Linea interna");
+					return 0;
+				}
+			}
+			tmp=tmp.getNext();
+			}
+		
+		//Verificación para que no se cruzen diagonales
+		//Se pregunta a la esquina derecha superior o inferior si ya hay una diagonal allí
+		int dif=Math.abs(xy1-xy2);
+		
+		//Si es diagonal la diferencia debe ser 9 o 11
+		if (Math.abs(10-dif)==1) {
+			int xy3;
+			if (xy1>xy2) {
+				xy3=xy1;
+			}
+			else {
+				xy3=xy2;
+			}
+			if (dif==9) {
+				xy3+=1;
+			}
+
+			Punto p3=this.get(xy3);
+			System.out.println("$"+xy3);
+			//El xy mayor es el que debe evaluar si está bloqueado
+			if (!p3.isBloqueo_d()) {
+				//Se bloquea la otra diagonal posible
+				System.out.println("se bloquea: "+(xy3));
+				Punto paux=this.get(xy3);
+				paux.setBloqueo_d(true);
+				
+				//Bloque para instanciar correctamente una linea dentro del tablero
+
+			} else {
+				System.out.println("ya ha una diagonal ahí: "+xy3);
+				return 0;
+			}
+			
+		}
+		
+		//Verificacion de puntos bloqueados totalmente
+		List FIGS=this.getFiguras();
+		tmp=FIGS.getFirst();
+		while (tmp!=null) {
+			Ftmp=(Figura)tmp.getInfo();
+			if (Ftmp.bloqueo(xy1, false)!=2 || Ftmp.bloqueo(xy2, false)!=2) {
+				System.out.println("Punto bloqueado");
+				return 0;
+			}
+			tmp=tmp.getNext();
+		}
+		
+		//Finalmente si ninguna restricción se cumple se agrega la linea;
+		System.out.println("Se crea la linea "+xy1+"-"+xy2);
+		Linea L=new Linea(xy1,xy2,this);
+		List Li=new List();
+		this.get(xy1).add(L);
+		this.get(xy2).add(L);
+		if (p1.getLineas().getSize()>1 && p2.getLineas().getSize()>1) {
+			this.recorrer2(xy1, xy2, L, Li, 0);
+			if (this.Ftmp!=null) {
+				return 1;
+			}
+		}
+		return 2;
+
+	 }
 	 /**
 	  * Este método es el principal de la clase matriz_puntos
 	  * Busca realizar un recorrido por todos los puntos posibles
@@ -87,7 +187,7 @@ public class Tablero {
 				 aco.print();
 				 System.out.println("cierra");
 				 Pact.addPrecedente(Lact);
-				 
+				 Ftmp=null;
 				 return false;
 			 }
 			 if (act==pri) {
@@ -153,6 +253,7 @@ public class Tablero {
 					 if (Pact.getPrecedente().find(Lact)!=-1) {
 						 Pact.getPrecedente().extract_o(Lact);
 						 System.out.println("Se bloquea por precedencia el camino por "+Lact.conecta(Pact).getXY());
+						 Ftmp=null;
 						 return false;
 					 }
 					 System.out.println("Se sigue el camino por "+Lact.conecta(Pact).getXY());
@@ -162,6 +263,7 @@ public class Tablero {
 					 tmp=tmp.getNext();
 				 }
 				 return true;
+				 
 				 
 			 }
 			 
@@ -177,6 +279,7 @@ public class Tablero {
 		 }
 		 aco.print();
 		 System.out.println("no cierra");
+		 Ftmp=null;
 		 return false;
 	 }
 	 

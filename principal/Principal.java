@@ -16,23 +16,36 @@ public class Principal {
         Tablero T1=new Tablero(4);
         Linea L0=new Linea(33,33,T1);
         List Li=new List();
+        
+        T1.gen(01, 11);
+        T1.gen(11,10);
+        T1.gen(10,00);
+        T1.gen(20, 21);
+        T1.gen(00,01);
+        System.out.println(T1.getFtmp());
+        T1.gen(10, 20);
+        System.out.println(T1.getFtmp());
+        
 
 
-        Linea L1=new Linea(00,10,T1);
-        Linea L2=new Linea(11,21,T1);
-        Linea L3=new Linea(21,12,T1);
-        Linea L4=new Linea(12,01,T1);
-        Linea L5=new Linea(01,00,T1);
-        Linea L6=new Linea(10,11,T1);
-        T1.recorrer2(00, 01, L5, Li.copy(),0);
+        /*Linea L1=new Linea(00,10,T1);
+        Linea L2=new Linea(10,11,T1);
+        Linea L3=new Linea(11,01,T1);
+        Linea L4=new Linea(01,00,T1);
+        Linea L5=new Linea(01,10,T1);*/
+        /*Linea L4=new Linea(30,31,T1);
+        Linea L5=new Linea(31,22,T1);
+        Linea L6=new Linea(22,12,T1);
+        Linea L7=new Linea(12,01,T1);
+        T1.recorrer2(12, 01, L7, Li.copy(),0);*/
         /*Linea L5=new Linea(00,10,T1);
         Linea L6=new Linea(00,01,T1);
         Linea L7=new Linea(01,11,T1);*/
-        Linea L7=new Linea(10,21,T1);
-        T1.recorrer2(10, 21, L7, Li.copy(),0);
-        Figura Fact=T1.getFtmp();
-        T1.recorrer3(10, 21, L7, Li.copy(),Fact);
-        //Fact.bloqueoL(12, 22);
+        //Linea L7=new Linea(10,21,T1);
+        //T1.recorrer2(10, 21, L7, Li.copy(),0);
+        //Figura Fact=T1.getFtmp();
+        //T1.recorrer3(10, 21, L7, Li.copy(),Fact);
+        //Fact.bloqueoL(11, 20);
 
 
 

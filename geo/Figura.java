@@ -160,6 +160,7 @@ public class Figura {
 			//Se extraen sus coordenadas en Y porque estas definirian uno de los 3 casos:
 			//que se toque un pared en Y, una pared en X o una esquina
 			int yinc=inc%10;
+			int xinc=(int)inc/10;
 			int y1=contig1%10-yinc;
 			int y2=contig2%10-yinc;
 			System.out.println(y1+"\t"+y2);
@@ -209,7 +210,7 @@ public class Figura {
 					
 					
 					if (op) {
-						bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+						bloqueof=2-this.bloqueo(inc, true);
 					}
 					else {
 						bloqueof=this.bloqueo(inc, true);
@@ -219,16 +220,25 @@ public class Figura {
 					return bloqueof;
 				}
 				else {
-					int yfin=fin%10;
-					if (yfin*(y1+y2)>=0) {
-						System.out.println("A11");
-						bloqueof=this.bloqueo(inc+10, true);
+					int yfin=fin%10-yinc;
+					int x1=contig1%10-xinc;
+					int x2=contig2%10-xinc;
+					int det2=x1+x2;
+					
+					if (det2==0) {
+						System.out.println("A12");
+						if ((y1+y2)*yfin<0) {
+							bloqueof=this.bloqueo(inc+10, true);
+							}
+						else {
+							bloqueof=2-this.bloqueo(inc+10, true);
+						}
 						System.out.println("retorna "+bloqueof);
 						return bloqueof;
 					}
 					else {
-						System.out.println("A12");
-						bloqueof=Math.abs(this.bloqueo(inc+10, true)-2);
+						System.out.println("A11");
+						bloqueof=this.bloqueo(inc+10, true);
 						System.out.println("retorna "+bloqueof);
 						return bloqueof;
 					}
@@ -236,22 +246,41 @@ public class Figura {
 				}
 			}
 			else if (det1>=0) {
-				System.out.println("A2");
-				bloqueof=this.bloqueo(inc, true);
-				System.out.println("retorna "+bloqueof);
-				return bloqueof;
+				int yfin=fin%10-yinc;
+				int x1=contig1%10-xinc;
+				int x2=contig2%10-xinc;
+				int det2=x1+x2;
+				
+				
+				if (det2==0) {
+					System.out.println("A22");
+					if ((y1+y2)*yfin<0) {
+						bloqueof=this.bloqueo(inc+10, true);
+						}
+					else {
+						bloqueof=2-this.bloqueo(inc+10, true);
+					}
+					System.out.println("retorna "+bloqueof);
+					return bloqueof;
+					}
+				else {
+					System.out.println("A21");
+					bloqueof=this.bloqueo(inc+10, true);
+					System.out.println("retorna "+bloqueof);
+					return bloqueof;
+				}
 			}
 			else {
-				int yfin=fin%10;
+				int yfin=fin%10-yinc;
 				if (Math.abs(inc-fin)>=9) {
 					System.out.println("B1");
-					bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+					bloqueof=2-this.bloqueo(inc, true);
 					System.out.println("retorna "+bloqueof);
 					return bloqueof;
 				}
 				else {
-					int x1=contig1%10-yinc;
-					int x2=contig2%10-yinc;
+					int x1=contig1%10-xinc;
+					int x2=contig2%10-xinc;
 					if (yfin==y1) {
 						if (x1>0) {
 							System.out.println("B22 por x1");
@@ -260,7 +289,7 @@ public class Figura {
 							return bloqueof;
 						}
 						else {
-							bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+							bloqueof=2-this.bloqueo(inc, true);
 							System.out.println("retorna "+bloqueof);
 							return bloqueof;
 						}
@@ -273,7 +302,7 @@ public class Figura {
 							return bloqueof;
 						}
 						else {
-							bloqueof=Math.abs(this.bloqueo(inc, true)-2);
+							bloqueof=2-this.bloqueo(inc, true);
 							System.out.println("retorna "+bloqueof);
 							return bloqueof;
 						}

@@ -35,8 +35,8 @@ public class principalS {
 		Cliente C1= new Cliente(ip1,9999);
 		Cliente C2= new Cliente(ip2,9999);
 		
-		C1.enviarpc(null, null, "dibujo verdadero",true);
-		C2.enviarpc(null, null, "dibujo falso",false);
+		C1.enviarpc(null, null, "Oponente "+a2.getUser(),true);
+		C2.enviarpc(null, null, "Oponente "+a1.getUser(),false);
 		
 		while(true) {
 			int c=0;
@@ -51,11 +51,11 @@ public class principalS {
 					System.out.println("Escuchando al primero");
 					a1=S1.escuchar();
 					System.out.println("Jugador 1 hizo"+a1.Shipout());
-					
-					if (a1.getXy1()!=50)
+					if (T1.gen(a1.getXy1(), a1.getXy2()))
 						break;
 					C1.enviarpc(null, null, "repita",true);
 					}
+				
 				
 				a[0]=(int)a1.getXy1()/10;
 				b[0]=a1.getXy1()%10;
@@ -70,11 +70,12 @@ public class principalS {
 					System.out.println("Escuchando al segundo");
 					a2=S1.escuchar();
 					System.out.println("Jugador 2 hizo"+a2.Shipout());
-					if (a2.getXy1()!=50)
+					if (T1.gen(a2.getXy1(), a2.getXy2()))
 						break;
 					C2.enviarpc(a, null, "repita",true);
 				}
 				
+				T1.gen(a2.getXy1(), a2.getXy2());
 				a[0]=(int)a2.getXy1()/10;
 				b[0]=a2.getXy1()%10;
 				a[1]=(int)a2.getXy2()/10;
