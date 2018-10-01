@@ -32,15 +32,19 @@ public class principalS {
 		}
 		
 		//Se usan las ip y un primer puerto para dar inicio a los jugadores
-		Cliente C1= new Cliente(ip1,9999);
-		Cliente C2= new Cliente(ip2,9999);
 		
-		C1.enviarpc(null, null, "Oponente "+a2.getUser(),true,0);
-		C2.enviarpc(null, null, "Oponente "+a1.getUser(),false,0);
 		
 		int val;
 		System.out.println("$$$");
+		LinkedQueue Cola=new LinkedQueue();
 		while(true) {
+			
+			Cliente C1= new Cliente(ip1,9999);
+			Cliente C2= new Cliente(ip2,9999);
+			
+			C1.enviarpc(null, null, "Oponente "+a2.getUser(),true,0);
+			C2.enviarpc(null, null, "Oponente "+a1.getUser(),false,0);
+			
 			int c=0;
 			//Se usan puertos distintos para responder durante el juego
 			C1= new Cliente(ip1,9998);
@@ -52,6 +56,11 @@ public class principalS {
 				while(true) {
 					System.out.println("Escuchando al primero");
 					a1=S1.escuchar();
+					if (a1.isInicio()) {
+						System.out.println("cola"+a1.Shipout());
+						Cola.enqueue(a1.getIp());
+						continue;
+					}
 					System.out.println("Jugador 1 hizo"+a1.Shipout());
 					val=T1.gen(a1.getXy1(), a1.getXy2());
 					if (val!=0)
@@ -74,8 +83,9 @@ public class principalS {
 					int[] posx=Li1.toarrayX();
 					int[] posy=Li1.toarrayY();
 					
-					C1.enviarpc(posx, posy, "Dibujo",false,T1.getFtmp().getSegs());
+					C1.enviarpc(posx, posy, "Dibujo",false,T1.getFtmp().getSegs()*2);
 					C2.enviarpc(posx, posy, "Dibujo",true,0);
+					T1.setFtmp(null);
 				}
 				
 				System.out.println("---");
@@ -83,6 +93,11 @@ public class principalS {
 				while(true) {
 					System.out.println("Escuchando al segundo");
 					a2=S1.escuchar();
+					if (a2.isInicio()) {
+						System.out.println("cola"+a2.Shipout());
+						Cola.enqueue(a2.getIp());
+						continue;
+					}
 					System.out.println("Jugador 2 hizo"+a2.Shipout());
 					val=T1.gen(a2.getXy1(), a2.getXy2());
 					if (val!=0)
@@ -106,11 +121,17 @@ public class principalS {
 					int[] posx=Li1.toarrayX();
 					int[] posy=Li1.toarrayY();
 					
-					C2.enviarpc(posx, posy, "Dibujo",false,T1.getFtmp().getSegs());
+					C2.enviarpc(posx, posy, "Dibujo",false,T1.getFtmp().getSegs()*2);
 					C1.enviarpc(posx, posy, "Dibujo",true,0);
+					T1.setFtmp(null);
 				}
 	
 			}
+			
+			ip1=(String)(Cola.dequeue());
+			ip2=(String)(Cola.dequeue());
+			
+			
 		}
 
 	}

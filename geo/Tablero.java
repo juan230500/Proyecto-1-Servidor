@@ -410,4 +410,8 @@ public class Tablero {
 	public Figura getFtmp() {
 		return Ftmp;
 	}
+
+	public void setFtmp(Figura ftmp) {
+		Ftmp = ftmp;
+	}
 }
