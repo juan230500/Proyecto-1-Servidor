@@ -7,12 +7,14 @@ public class Figura {
 	float Area;
 	List vertices;
 	Tablero Tablero_juego;
+	int segs;
 	
-	public Figura(List puntos,Tablero tablero) {
+	public Figura(List puntos,Tablero tablero,int s) {
 		this.Puntos=puntos;
 		this.Tablero_juego=tablero;
 		this.vertices=this.vertices();
 		this.Area=this.calc_area();
+		this.segs=s;
 	}
 	
 	/**
@@ -141,7 +143,9 @@ public class Figura {
 	public int bloqueoL(int inc, int fin) {
 			boolean op;
 			int bloqueof;
-			
+			if (Puntos.find(inc)!=-1 && Puntos.find(fin)!=-1) {
+				return 1;
+			}
 			//Adaptacion del incio y fin a los casos esperados
 			if (inc-fin==1) {
 				System.out.println("sin cambios");
@@ -511,6 +515,14 @@ public class Figura {
 
 	public void setPuntos(List puntos) {
 		Puntos = puntos;
+	}
+
+	public int getSegs() {
+		return segs;
+	}
+
+	public void setSegs(int segs) {
+		this.segs = segs;
 	}
 
 	

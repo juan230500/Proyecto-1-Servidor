@@ -35,8 +35,8 @@ public class principalS {
 		Cliente C1= new Cliente(ip1,9999);
 		Cliente C2= new Cliente(ip2,9999);
 		
-		C1.enviarpc(null, null, "Oponente "+a2.getUser(),true);
-		C2.enviarpc(null, null, "Oponente "+a1.getUser(),false);
+		C1.enviarpc(null, null, "Oponente "+a2.getUser(),true,0);
+		C2.enviarpc(null, null, "Oponente "+a1.getUser(),false,0);
 		
 		int val;
 		System.out.println("$$$");
@@ -56,7 +56,7 @@ public class principalS {
 					val=T1.gen(a1.getXy1(), a1.getXy2());
 					if (val!=0)
 						break;
-					C1.enviarpc(null, null, "repita",true);
+					C1.enviarpc(null, null, "repita",true,0);
 					}
 				
 				if (val==2) {
@@ -65,8 +65,8 @@ public class principalS {
 					a[1]=(int)a1.getXy2()/10;
 					b[1]=a1.getXy2()%10;
 					
-					C1.enviarpc(a, b, "Linea",false);
-					C2.enviarpc(a, b, "Linea",true);
+					C1.enviarpc(a, b, "Linea",false,0);
+					C2.enviarpc(a, b, "Linea",true,0);
 					}
 				else {
 					List Li1=new List();
@@ -74,8 +74,8 @@ public class principalS {
 					int[] posx=Li1.toarrayX();
 					int[] posy=Li1.toarrayY();
 					
-					C1.enviarpc(posx, posy, "Dibujo",false);
-					C2.enviarpc(posx, posy, "Dibujo",true);
+					C1.enviarpc(posx, posy, "Dibujo",false,T1.getFtmp().getSegs());
+					C2.enviarpc(posx, posy, "Dibujo",true,0);
 				}
 				
 				System.out.println("---");
@@ -87,7 +87,7 @@ public class principalS {
 					val=T1.gen(a2.getXy1(), a2.getXy2());
 					if (val!=0)
 						break;
-					C2.enviarpc(a, null, "repita",true);
+					C2.enviarpc(a, null, "repita",true,0);
 				}
 				
 				if (val==2) {
@@ -96,8 +96,8 @@ public class principalS {
 					a[1]=(int)a2.getXy2()/10;
 					b[1]=a2.getXy2()%10;
 					
-					C2.enviarpc(a, b, "Linea",false);
-					C1.enviarpc(a, b, "Linea",true);
+					C2.enviarpc(a, b, "Linea",false,0);
+					C1.enviarpc(a, b, "Linea",true,0);
 					System.out.println("---");
 				}
 				else {
@@ -106,8 +106,8 @@ public class principalS {
 					int[] posx=Li1.toarrayX();
 					int[] posy=Li1.toarrayY();
 					
-					C2.enviarpc(posx, posy, "Dibujo",false);
-					C1.enviarpc(posx, posy, "Dibujo",true);
+					C2.enviarpc(posx, posy, "Dibujo",false,T1.getFtmp().getSegs());
+					C1.enviarpc(posx, posy, "Dibujo",true,0);
 				}
 	
 			}

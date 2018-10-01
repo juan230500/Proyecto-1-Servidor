@@ -138,10 +138,10 @@ public class Tablero {
 		List FIGS=this.getFiguras();
 		tmp=FIGS.getFirst();
 		while (tmp!=null) {
-			System.out.println(tmp);
 			Ftmp=(Figura)tmp.getInfo();
-			if (Ftmp.bloqueo(xy1, false)!=2 || Ftmp.bloqueo(xy2, false)!=2) {
-				System.out.println("Punto bloqueado");
+			if (Ftmp.bloqueo(xy1, false)==0 || Ftmp.bloqueo(xy2, false)==0) {
+				System.out.println("Punto bloqueado por ");
+				Ftmp.getPuntos().print();
 				return 0;
 			}
 			tmp=tmp.getNext();
@@ -165,7 +165,16 @@ public class Tablero {
 				return 2;
 			}
 			else {
-				this.recorrer3(xy1, xy2, L, Li.copy(), this.Ftmp,true);
+				/*this.recorrer3(xy1, xy2, L, Li.copy(), this.Ftmp,false);
+				for (int i=dim-1;i!=-1;i--) {
+					for (int j=dim-1;j!=-1;j--) {
+						Punto p=this.get(i*10+j);
+						p.setPrecedente(new List());
+					}
+				}*/
+				System.out.println("%%%");
+				this.Ftmp.getPuntos().print();
+				Figuras.insert(this.Ftmp);
 				return 1;
 			}
 		}
@@ -204,7 +213,7 @@ public class Tablero {
 				 aco.insert(act);
 				 aco.print();
 				 System.out.println("cierraC con "+(++seg)+" segmentos");
-				 Ftmp=new Figura(aco,this);
+				 this.Ftmp=new Figura(aco,this,seg);
 				 /*Figura F1=new Figura(aco,this);
 				 this.Figuras.insert(F1);*/
 				 
@@ -259,12 +268,18 @@ public class Tablero {
 		 Linea Lact=ig;
 		 List Figs=new List();
 		 
+		 System.out.println("$##"+act);
 		 while (L_rest.getSize()>0) {
 			 act=Pact.getXY();
 			 aco.print();
 			 System.out.println(act);
 			 
+			 if (!FigsR && Ftmp.getPuntos().find(act)==-1) {
+				FigsR=true; 
+			 }
+			 
 			 if (aco.find(act)!=-1){
+				 
 				 aco.print();
 				 System.out.println("cierra");
 				 Pact.addPrecedente(Lact);
@@ -276,7 +291,7 @@ public class Tablero {
 				 aco.print();
 				 System.out.println("cierraC con ");
 				 Pact.addPrecedente(Lact);
-				 Ftmp=new Figura(aco,this);
+				 this.Ftmp=new Figura(aco,this,0);
 				 /*Figura F1=new Figura(aco,this);
 				 this.Figuras.insert(F1);*/
 				 
@@ -286,20 +301,51 @@ public class Tablero {
 			 if (L_rest.getSize()>1) {
 				 //Caso de tocar una figura preconstruida
 				 aco.insert(act);
-				 if (FigsR && Ftmp.getPuntos().find(act)!=-1 && L_rest.getSize()>1) {
+				 
+				 System.out.println("rrrr");
+				 if (FigsR && Ftmp.getPuntos().find(act)==-1) {
+					 FigsR=false;
+				 }
+				 if (!FigsR && Ftmp.getPuntos().find(act)!=-1) {
 					 Linea L1=(Linea)L_rest.get(0);
 					 Linea L2=(Linea)L_rest.get(1);
+					 Punto p1=L1.conecta(Pact);
+					 Punto p2=L2.conecta(Pact);
 					 int xy1=L1.conecta(Pact).getXY();
 					 int xy2=L2.conecta(Pact).getXY();
-					 System.out.println(xy1+">>>>>"+xy2);
-					 FigsR=false;
-					 if (Ftmp.bloqueo(xy2, false)>Ftmp.bloqueo(xy1, false)) {
-						 this.recorrer3(pri,xy1, L1, aco.copy().copy(),Ftmp, FigsR);
+					 System.out.println(Pact.getXY()+"$"+xy1+">>>>>"+xy2);
+					 FigsR=true;
+					 Pact.getFiguras().print();
+					 if (Ftmp.bloqueo(xy2, false)==Ftmp.bloqueo(xy1, false)) {
+						 if (Ftmp.bloqueoL(xy2, act)>Ftmp.bloqueoL(xy1, act)) {
+							 System.out.println("#");
+							 p1.getLineas().extract_o(L1);
+							 Pact.getLineas().extract_o(L1);
+							 this.recorrer3(pri,xy1, L1, aco.copy().copy(),Ftmp, true);
+						 }
+						 else {
+							 System.out.println("#1");
+							 p1.getLineas().extract_o(L2);
+							 Pact.getLineas().print();
+							 Pact.getLineas().extract_o(L2);
+							 Pact.getLineas().print();
+							 this.recorrer3(pri,xy2, L2, aco.copy().copy(),Ftmp, true);
+						 }
+					 }
+					 else if (Ftmp.bloqueo(xy2, false)>Ftmp.bloqueo(xy1, false)) {
+						 System.out.println("#3");
+						 p1.getLineas().extract_o(L1);
+						 Pact.getLineas().extract_o(L1);
+						 this.recorrer3(pri,xy1, L1, aco.copy().copy(),Ftmp, true);
 						 
 					 }
 					 else {
-						 this.recorrer3(pri,xy2, L2, aco.copy().copy(),Ftmp,FigsR);
+						 System.out.println("#2");
+						 p1.getLineas().extract_o(L2);
+						 Pact.getLineas().extract_o(L2);
+						 this.recorrer3(pri,xy2, L2, aco.copy().copy(),Ftmp,true);
 					 }
+					 
 					 return true;
 					 
 					 
@@ -328,11 +374,13 @@ public class Tablero {
 			 }
 			
 			 
-			 
 			 Lact=(Linea)L_rest.get(0);
 			 Pact=Lact.conecta(Pact);
 			 L_rest=Pact.get_rest(Lact);
 			 aco.insert(act);
+			 if (FigsR) {
+				 Pact.getLineas().extract_o(Lact);
+			 }
 		 }
 		 aco.print();
 		 System.out.println("no cierra");

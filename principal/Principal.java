@@ -22,7 +22,9 @@ public class Principal {
         T1.gen(11,01);
         T1.gen(01, 00);
         T1.gen(10, 20);
-        T1.gen(20, 11);
+        T1.gen(20, 21);
+        T1.gen(11, 21);
+        //T1.get(10).getLineas().print();
         //T1.getFtmp().getPuntos().print();
         //T1.getFtmp().bloqueoL(01,10);
         //T1.gen(00, 11);

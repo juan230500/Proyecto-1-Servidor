@@ -50,9 +50,10 @@ public class Cliente {
             e1.printStackTrace();
         }
     }
-    public void enviarpc(int [] xpos,int[] ypos,String dibujo , boolean escucha){
+    public void enviarpc(int [] xpos,int[] ypos,String dibujo , boolean escucha,int pun){
 
         Envio E1=new Envio(xpos,ypos,dibujo,escucha);
+        E1.setXy1(pun);
         
 
         Socket S1;
