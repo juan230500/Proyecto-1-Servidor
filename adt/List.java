@@ -19,7 +19,7 @@ public class List {
 		  int i=0;
 		  Node tmp=this.first;
 		  while (tmp!=null) {
-			  a[i]=(int)((int)tmp.getInfo())/10;
+			  a[i]=(((int)((int)tmp.getInfo())/10)+2)*100+25;
 			  tmp=tmp.getNext();
 			  i++;
 		  }
@@ -35,7 +35,7 @@ public class List {
 		  int i=0;
 		  Node tmp=this.first;
 		  while (tmp!=null) {
-			  a[i]=(int)tmp.getInfo()%10;
+			  a[i]=(((int)tmp.getInfo()%10)+1)*100+25;
 			  tmp=tmp.getNext();
 			  i++;
 		  }

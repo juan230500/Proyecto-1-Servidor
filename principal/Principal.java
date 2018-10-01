@@ -13,18 +13,19 @@ public class Principal {
         L1.recortar(0,3);
         L1.print();*/
 
-        Tablero T1=new Tablero(4);
+        Tablero T1=new Tablero(6);
         Linea L0=new Linea(33,33,T1);
         List Li=new List();
         
-        T1.gen(01, 11);
-        T1.gen(11,10);
-        T1.gen(10,00);
-        T1.gen(20, 21);
-        T1.gen(00,01);
-        System.out.println(T1.getFtmp());
+        T1.gen(00, 10);
+        T1.gen(10,11);
+        T1.gen(11,01);
+        T1.gen(01, 00);
         T1.gen(10, 20);
-        System.out.println(T1.getFtmp());
+        T1.gen(20, 11);
+        //T1.getFtmp().getPuntos().print();
+        //T1.getFtmp().bloqueoL(01,10);
+        //T1.gen(00, 11);
         
 
 

@@ -38,6 +38,8 @@ public class principalS {
 		C1.enviarpc(null, null, "Oponente "+a2.getUser(),true);
 		C2.enviarpc(null, null, "Oponente "+a1.getUser(),false);
 		
+		int val;
+		System.out.println("$$$");
 		while(true) {
 			int c=0;
 			//Se usan puertos distintos para responder durante el juego
@@ -51,39 +53,62 @@ public class principalS {
 					System.out.println("Escuchando al primero");
 					a1=S1.escuchar();
 					System.out.println("Jugador 1 hizo"+a1.Shipout());
-					if (T1.gen(a1.getXy1(), a1.getXy2()))
+					val=T1.gen(a1.getXy1(), a1.getXy2());
+					if (val!=0)
 						break;
 					C1.enviarpc(null, null, "repita",true);
 					}
 				
+				if (val==2) {
+					a[0]=(int)a1.getXy1()/10;
+					b[0]=a1.getXy1()%10;
+					a[1]=(int)a1.getXy2()/10;
+					b[1]=a1.getXy2()%10;
+					
+					C1.enviarpc(a, b, "Linea",false);
+					C2.enviarpc(a, b, "Linea",true);
+					}
+				else {
+					List Li1=new List();
+					Li1=T1.getFtmp().getPuntos();
+					int[] posx=Li1.toarrayX();
+					int[] posy=Li1.toarrayY();
+					
+					C1.enviarpc(posx, posy, "Dibujo",false);
+					C2.enviarpc(posx, posy, "Dibujo",true);
+				}
 				
-				a[0]=(int)a1.getXy1()/10;
-				b[0]=a1.getXy1()%10;
-				a[1]=(int)a1.getXy2()/10;
-				b[1]=a1.getXy2()%10;
-				
-				C1.enviarpc(a, b, "Linea",false);
-				C2.enviarpc(a, b, "Linea",true);
 				System.out.println("---");
 				
 				while(true) {
 					System.out.println("Escuchando al segundo");
 					a2=S1.escuchar();
 					System.out.println("Jugador 2 hizo"+a2.Shipout());
-					if (T1.gen(a2.getXy1(), a2.getXy2()))
+					val=T1.gen(a2.getXy1(), a2.getXy2());
+					if (val!=0)
 						break;
 					C2.enviarpc(a, null, "repita",true);
 				}
 				
-				T1.gen(a2.getXy1(), a2.getXy2());
-				a[0]=(int)a2.getXy1()/10;
-				b[0]=a2.getXy1()%10;
-				a[1]=(int)a2.getXy2()/10;
-				b[1]=a2.getXy2()%10;
-				
-				C2.enviarpc(a, b, "Linea",false);
-				C1.enviarpc(a, b, "Linea",true);
-				System.out.println("---");
+				if (val==2) {
+					a[0]=(int)a2.getXy1()/10;
+					b[0]=a2.getXy1()%10;
+					a[1]=(int)a2.getXy2()/10;
+					b[1]=a2.getXy2()%10;
+					
+					C2.enviarpc(a, b, "Linea",false);
+					C1.enviarpc(a, b, "Linea",true);
+					System.out.println("---");
+				}
+				else {
+					List Li1=new List();
+					Li1=T1.getFtmp().getPuntos();
+					int[] posx=Li1.toarrayX();
+					int[] posy=Li1.toarrayY();
+					
+					C2.enviarpc(posx, posy, "Dibujo",false);
+					C1.enviarpc(posx, posy, "Dibujo",true);
+				}
 	
 			}
 		}

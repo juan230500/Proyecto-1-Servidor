@@ -63,6 +63,7 @@ public class Figura {
 		int cont=0;
 		while (xy<60){
 			int posv=this.vertices.find(xy);
+			
 			if (posv!=-1) {
 				int tam=vertices.getSize();
 				//Se pregunta por los contiguos
@@ -70,25 +71,28 @@ public class Figura {
 				int con2=(int)vertices.get((posv-1)%tam);
 				System.out.println("contiguos "+con1+" "+con2);
 				//Se extraen las Y de los contiguos y se guarda la Y actual en tam que ya no se usará
-				con1%=10;
-				con2%=10;
+				int con1y=con1%10;
+				int con2y=con2%10;
 				int aux=xy%10;
 				//Se les resta la Y actual para que estén referenciadas a esta
-				con1-=aux;
-				con2-=aux;
+				con1y-=aux;
+				con2y-=aux;
 				//Si ambas son negativas o ambas positivas ese vértice no deberia contarse
 				//porque están ambas debajo o encima del rayo en y
 				//Tambien si alguna es 0 porque estaría a la misma altura del punto actual
-				if (con2*con1==0) {
+				
+				if (con1y*con2y==0) {
 					System.out.println("vertice cerrado en "+xy);
+					
 					xy+=10;
 					//Camina hasta el siguiente vértice que debe compartir ese lado paralelo a Y
+					vertices.print();
 					while (this.vertices.find(xy)==-1) {
 						xy+=10;
+						System.out.println(xy);
 						
 					}
 					//Se debe evaluar con respecto a si el siguiente vértice "cambia de altura" para saber si suma como pared
-					System.out.println(tam);
 					int con1aux=((int)vertices.get((posv+1)%tam))%10;
 					int con2aux=((int)vertices.get((posv-1)%tam))%10;
 					if ((con1+con2)*(con1aux+con2aux)<0) {
@@ -96,21 +100,26 @@ public class Figura {
 						cont++;
 					}
 					else {
+						
 						System.out.println("vertice final abierto en "+xy);
 					}
+					
 				}
 				//Si da negativo el ángulo es agudo hacia arriba o abajo y se suma en el total
-				else if (con1*con2<0){
+				else if (con1y*con2y<0){
 					cont++;
 					System.out.println("vertice abierto en "+xy);
 				}
+				xy+=10;
+				
 			}
 			//Suma por ser pared definitiva
 			else if (this.Puntos.find(xy)!=-1){
 				cont++;
 			}
-
-			xy+=10;
+			else{
+				xy+=10;
+			}
 		}
 		
 		if (cont%2==0){
@@ -165,13 +174,15 @@ public class Figura {
 			int y2=contig2%10-yinc;
 			System.out.println(y1+"\t"+y2);
 			System.out.println(contig1+"\t"+contig2);
-			
+
 			int det1=y1*y2;
 			if (det1==0) {
+				
 				if (inc-contig1==-10 || inc-contig2==-10) {
 					System.out.println("C");
 					//Bloque para buscar un nuevo vértice y revisar si comparte lado con la linea actual
-					while (inc>0) {
+					while (y1+y2==0) {
+						
 						posp=this.Puntos.find(inc);
 						//Por fin encontro la esquina
 						if (posp!=-1) {
@@ -181,16 +192,21 @@ public class Figura {
 							y1=contig1%10-yinc;
 							y2=contig2%10-yinc;
 						}
+						
 						inc-=10;
+						System.out.println("$$$");
 					}
+					
 					System.out.println(yinc+"V"+contig1+"\t"+contig2);
 					//Se prepara para comparar con el Y del punto final
 					int yfin=fin%10-yinc;
 					//Se define cual contiguo esta paralelo a Y y cual no para saber si el valor de adentro es compartido o no
+					
+					System.out.println("$$$"+y1);
 					if (y1==0) {
 						//Caso en el que estan uno arriba del otro
 						System.out.println(y2+"#"+y1+"%"+yfin);
-						if (y2*yfin<0) {
+						if (y2*yfin>=0) {
 							op=true;
 						}
 						else {
@@ -199,16 +215,15 @@ public class Figura {
 					}
 					else {
 						//Caso en el que estan uno arriba del otro
-						if (y1*yfin<0) {
+						if (y1*yfin>=0) {
 							op=true;
 						}
 						else {
 							op=false;
 						}
 					}
-					inc+=10;
 					
-					
+					//System.out.println("$$$"+inc);
 					if (op) {
 						bloqueof=2-this.bloqueo(inc, true);
 					}
@@ -221,13 +236,13 @@ public class Figura {
 				}
 				else {
 					int yfin=fin%10-yinc;
-					int x1=contig1%10-xinc;
-					int x2=contig2%10-xinc;
+					int x1=(int)contig1/10-xinc;
+					int x2=(int)contig2/10-xinc;
 					int det2=x1+x2;
 					
 					if (det2==0) {
 						System.out.println("A12");
-						if ((y1+y2)*yfin<0) {
+						if ((y1+y2)*yfin<=0) {
 							bloqueof=this.bloqueo(inc+10, true);
 							}
 						else {
@@ -246,15 +261,17 @@ public class Figura {
 				}
 			}
 			else if (det1>=0) {
+				
 				int yfin=fin%10-yinc;
-				int x1=contig1%10-xinc;
-				int x2=contig2%10-xinc;
+				int x1=(int)contig1/10-xinc;
+				int x2=(int)contig2/10-xinc;
 				int det2=x1+x2;
 				
 				
 				if (det2==0) {
 					System.out.println("A22");
-					if ((y1+y2)*yfin<0) {
+
+					if ((y1+y2)*yfin<=0) {
 						bloqueof=this.bloqueo(inc+10, true);
 						}
 					else {
@@ -279,8 +296,8 @@ public class Figura {
 					return bloqueof;
 				}
 				else {
-					int x1=contig1%10-xinc;
-					int x2=contig2%10-xinc;
+					int x1=(int)contig1/10-xinc;
+					int x2=(int)contig2/10-xinc;
 					if (yfin==y1) {
 						if (x1>0) {
 							System.out.println("B22 por x1");
@@ -289,6 +306,7 @@ public class Figura {
 							return bloqueof;
 						}
 						else {
+							System.out.println("B21 por x1");
 							bloqueof=2-this.bloqueo(inc, true);
 							System.out.println("retorna "+bloqueof);
 							return bloqueof;
@@ -302,6 +320,7 @@ public class Figura {
 							return bloqueof;
 						}
 						else {
+							System.out.println("B21 por x2");
 							bloqueof=2-this.bloqueo(inc, true);
 							System.out.println("retorna "+bloqueof);
 							return bloqueof;
@@ -488,6 +507,10 @@ public class Figura {
 
 	public List getVertices() {
 		return vertices;
+	}
+
+	public void setPuntos(List puntos) {
+		Puntos = puntos;
 	}
 
 	

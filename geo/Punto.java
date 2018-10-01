@@ -100,6 +100,9 @@ public class Punto {
 	public List getFiguras() {
 		return Figuras;
 	}
+	public void setPrecedente(List precedente) {
+		Precedente = precedente;
+	}
 	
 
 }

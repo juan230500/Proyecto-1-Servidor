@@ -138,6 +138,7 @@ public class Tablero {
 		List FIGS=this.getFiguras();
 		tmp=FIGS.getFirst();
 		while (tmp!=null) {
+			System.out.println(tmp);
 			Ftmp=(Figura)tmp.getInfo();
 			if (Ftmp.bloqueo(xy1, false)!=2 || Ftmp.bloqueo(xy2, false)!=2) {
 				System.out.println("Punto bloqueado");
@@ -153,8 +154,18 @@ public class Tablero {
 		this.get(xy1).add(L);
 		this.get(xy2).add(L);
 		if (p1.getLineas().getSize()>1 && p2.getLineas().getSize()>1) {
-			this.recorrer2(xy1, xy2, L, Li, 0);
-			if (this.Ftmp!=null) {
+			this.recorrer2(xy1, xy2, L, Li.copy(), 0);
+			for (int i=dim-1;i!=-1;i--) {
+				for (int j=dim-1;j!=-1;j--) {
+					Punto p=this.get(i*10+j);
+					p.setPrecedente(new List());
+				}
+			}
+			if (this.Ftmp==null) {
+				return 2;
+			}
+			else {
+				this.recorrer3(xy1, xy2, L, Li.copy(), this.Ftmp,true);
 				return 1;
 			}
 		}
@@ -187,7 +198,6 @@ public class Tablero {
 				 aco.print();
 				 System.out.println("cierra");
 				 Pact.addPrecedente(Lact);
-				 Ftmp=null;
 				 return false;
 			 }
 			 if (act==pri) {
@@ -205,44 +215,6 @@ public class Tablero {
 				 List Figtmp=Pact.getFiguras();
 				 //Caso de tocar una figura preconstruida
 				 seg++;
-				 if (Figtmp.getSize()>0) {
-					 //Al tocar un área se restarán n-1 segmentos por los n puntos compartidos
-					 Node tmp=Figtmp.getFirst();
-					 while (tmp!=null) {
-						 Figs.insert(tmp.getInfo());
-						 ((Figura)tmp.getInfo()).getVertices().print();
-						 System.out.println("se toca con ");
-						 tmp=tmp.getNext();
-					 }
-					 /*((Figura)Fig.get(0)).getVertices().print();
-					 iFigs.insert(act);
-					 Figs.insert(((Figura)Fig.get(0)));
-					 List rotada=((Figura)Fig.get(0)).rotacion(act);
-					 rotada.print();
-					 
-					 //Bloque para elejir correctamente el camino por la figura preconstruida
-					 Node tmp=rotada.getFirst().getNext();
-					 L_rest=Pact.get_rest(Lact);
-					 Lact=(Linea)L_rest.get(0);
-					 for (int i=0;Lact.conecta(Pact).getXY()!=(int)tmp.getInfo();i++) {
-						 Lact=(Linea)L_rest.get(i);
-					 }
-					 Pact=Lact.conecta(Pact);
-					 
-					 //Cuando se encuentren tres lineas en un punto significa una posible salidad dela figura
-					 while (Pact.getLineas().getSize()<3) {
-						 System.out.println(Pact.getLineas().getSize());
-						 L_rest=Pact.get_rest(Lact);
-						 Lact=(Linea)L_rest.get(0);
-						 Pact=Lact.conecta(Pact);
-						 act=Pact.getXY();
-					 }
-					 fFigs.insert(act);
-					 System.out.println("Sale por "+act);
-					 System.out.println("Se toca la figura en "+iFigs.getFirst().getInfo());
-					 
-					 return false;*/
-				 }
 				 //Caso de bifurcación simple 
 				 
 				 //Bloque para generar nuevos caminos
@@ -253,7 +225,6 @@ public class Tablero {
 					 if (Pact.getPrecedente().find(Lact)!=-1) {
 						 Pact.getPrecedente().extract_o(Lact);
 						 System.out.println("Se bloquea por precedencia el camino por "+Lact.conecta(Pact).getXY());
-						 Ftmp=null;
 						 return false;
 					 }
 					 System.out.println("Se sigue el camino por "+Lact.conecta(Pact).getXY());
@@ -279,11 +250,10 @@ public class Tablero {
 		 }
 		 aco.print();
 		 System.out.println("no cierra");
-		 Ftmp=null;
 		 return false;
 	 }
 	 
-	 public boolean recorrer3(int pri,int act,Linea ig, List aco, Figura Ftmp) {
+	 public boolean recorrer3(int pri,int act,Linea ig, List aco, Figura Ftmp, boolean FigsR) {
 		 Punto Pact=this.get(act);
 		 List L_rest=Pact.get_rest(ig);
 		 Linea Lact=ig;
@@ -314,21 +284,32 @@ public class Tablero {
 			 }
 			 
 			 if (L_rest.getSize()>1) {
-				 List Figtmp=Pact.getFiguras();
 				 //Caso de tocar una figura preconstruida
-				 if (Figtmp.getSize()>0) {
+				 aco.insert(act);
+				 if (FigsR && Ftmp.getPuntos().find(act)!=-1 && L_rest.getSize()>1) {
 					 Linea L1=(Linea)L_rest.get(0);
 					 Linea L2=(Linea)L_rest.get(1);
 					 int xy1=L1.conecta(Pact).getXY();
 					 int xy2=L2.conecta(Pact).getXY();
-					 System.out.println(xy1+"bloqueo"+Ftmp.bloqueo(xy1, false)+"\t"+xy2+"bloqueo"+Ftmp.bloqueo(xy2,false));
+					 System.out.println(xy1+">>>>>"+xy2);
+					 FigsR=false;
+					 if (Ftmp.bloqueo(xy2, false)>Ftmp.bloqueo(xy1, false)) {
+						 this.recorrer3(pri,xy1, L1, aco.copy().copy(),Ftmp, FigsR);
+						 
+					 }
+					 else {
+						 this.recorrer3(pri,xy2, L2, aco.copy().copy(),Ftmp,FigsR);
+					 }
+					 return true;
+					 
+					 
 					 
 				 }
 				 //Caso de bifurcación simple 
 				 
 				 //Bloque para generar nuevos caminos
 				 Node tmp=L_rest.getFirst();
-				 aco.insert(act);
+				 
 				 while(tmp!=null) {
 					 Lact=(Linea)tmp.getInfo();
 					 if (Pact.getPrecedente().find(Lact)!=-1) {
@@ -337,7 +318,7 @@ public class Tablero {
 						 return false;
 					 }
 					 System.out.println("Se sigue el camino por "+Lact.conecta(Pact).getXY());
-					 if(this.recorrer3(pri,Lact.conecta(Pact).getXY(), Lact, aco.copy().copy(),Ftmp)) {
+					 if(this.recorrer3(pri,Lact.conecta(Pact).getXY(), Lact, aco.copy().copy(),Ftmp ,FigsR)) {
 						 break;
 					 }
 					 tmp=tmp.getNext();
